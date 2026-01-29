@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Widget - IQ Test Traffic Boost</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+      color: white;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 2.5rem;
+    }
+    .subtitle {
+      text-align: center;
+      color: #888;
+      margin-bottom: 40px;
+    }
+    .card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .card h2 {
+      color: #667eea;
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card p {
+      color: #ccc;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    .status {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .status.success {
+      background: rgba(76, 175, 80, 0.2);
+      color: #4CAF50;
+    }
+    .status.error {
+      background: rgba(244, 67, 54, 0.2);
+      color: #F44336;
+    }
+    .status.loading {
+      background: rgba(255, 193, 7, 0.2);
+      color: #FFC107;
+    }
+    .status.info {
+      background: rgba(102, 126, 234, 0.2);
+      color: #667eea;
+    }
+    .info-box {
+      background: #1a1a2e;
+      padding: 12px 15px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 13px;
+      color: #4CAF50;
+      word-break: break-all;
+      margin: 10px 0;
+    }
+    .test-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 10px;
+      margin-right: 10px;
+      transition: all 0.2s;
+    }
+    .test-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    .test-btn.secondary {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+    .test-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .result {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 8px;
+      background: rgba(0,0,0,0.3);
+      font-size: 14px;
+    }
+    .fingerprint-display {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+      border: 1px solid rgba(102, 126, 234, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+    .fingerprint-value {
+      font-family: monospace;
+      font-size: 24px;
+      font-weight: 700;
+      color: #667eea;
+      letter-spacing: 2px;
+    }
+    .fingerprint-label {
+      font-size: 12px;
+      color: #888;
+      margin-top: 5px;
+    }
+    .log-container {
+      background: #0d0d1a;
+      border-radius: 8px;
+      padding: 15px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 12px;
+      margin-top: 15px;
+    }
+    .log-entry {
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+    .log-time {
+      color: #666;
+      margin-right: 10px;
+    }
+    .log-msg {
+      color: #ccc;
+    }
+    .log-msg.success { color: #4CAF50; }
+    .log-msg.error { color: #F44336; }
+    .log-msg.info { color: #667eea; }
+    .log-msg.warn { color: #FFC107; }
+    .two-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 768px) {
+      .two-cols {
+        grid-template-columns: 1fr;
+      }
+    }
+    .step-number {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .task-info {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+    }
+    .task-info p {
+      margin: 5px 0;
+      font-size: 13px;
+    }
+    .task-info strong {
+      color: #10b981;
+    }
+    a {
+      color: #667eea;
+    }
+    .clear-btn {
+      background: transparent;
+      border: 1px solid #666;
+      color: #888;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-left: 10px;
+    }
+    .clear-btn:hover {
+      border-color: #F44336;
+      color: #F44336;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 Test Widget System</h1>
+    <p class="subtitle">Kiểm tra luồng hoạt động Widget Traffic Boost</p>
+
+    <!-- Device Fingerprint -->
+    <div class="card">
+      <h2><span class="step-number">0</span> Device Fingerprint</h2>
+      <p>Mã định danh thiết bị (giống nhau trên các browser khác nhau cùng thiết bị)</p>
+      <div class="fingerprint-display">
+        <div class="fingerprint-value" id="fingerprint-value">Loading...</div>
+        <div class="fingerprint-label">Fingerprint của thiết bị này</div>
+      </div>
+    </div>
+
+    <div class="two-cols">
+      <!-- Step 1: API Health -->
+      <div class="card">
+        <h2><span class="step-number">1</span> Kiểm tra API</h2>
+        <p>Test server backend có hoạt động không</p>
+        <button class="test-btn" onclick="testHealth()">Test API Health</button>
+        <div id="health-result" class="result" style="display: none;"></div>
+      </div>
+
+      <!-- Step 2: Create Task -->
+      <div class="card">
+        <h2><span class="step-number">2</span> Nhận nhiệm vụ</h2>
+        <p>Tạo task để test widget (mô phỏng user làm xong test IQ)</p>
+        <button class="test-btn secondary" onclick="createTask()">🎯 Nhận nhiệm vụ</button>
+        <div id="task-result" class="result" style="display: none;"></div>
+      </div>
+    </div>
+
+    <!-- Step 3: Check on Target Site -->
+    <div class="card">
+      <h2><span class="step-number">3</span> Kiểm tra trên trang đích</h2>
+      <p>Sau khi nhận nhiệm vụ, mở trang đích để xem widget có xuất hiện không</p>
+      <div id="target-site-info" style="display: none;">
+        <div class="task-info">
+          <p>📌 <strong>Site:</strong> <span id="site-name">-</span></p>
+          <p>🔗 <strong>URL:</strong> <a id="site-url" href="#" target="_blank">-</a></p>
+          <p>🔑 <strong>Site Key:</strong> <code id="site-key">-</code></p>
+        </div>
+        <p style="margin-top: 10px; color: #888; font-size: 13px;">
+          ⚠️ Mở link trên <strong>cùng thiết bị này</strong> để widget hiện lên. Nếu mở trên thiết bị khác, widget sẽ không xuất hiện.
+        </p>
+      </div>
+      <button class="test-btn" onclick="openTargetSite()" id="open-site-btn" disabled>🌐 Mở trang đích</button>
+    </div>
+
+    <!-- Step 4: Verify Code -->
+    <div class="card">
+      <h2><span class="step-number">4</span> Xác nhận mã</h2>
+      <p>Sau khi lấy được mã từ trang đích, nhập vào đây để xác nhận</p>
+      <div style="display: flex; gap: 10px; margin-top: 15px;">
+        <input type="text" id="verify-code" placeholder="Nhập mã xác nhận (VD: ABC123)" 
+          style="flex: 1; padding: 12px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); 
+          background: rgba(0,0,0,0.3); color: white; font-size: 16px; font-family: monospace; 
+          letter-spacing: 2px; text-transform: uppercase;">
+        <button class="test-btn secondary" onclick="verifyCode()">✅ Xác nhận</button>
+      </div>
+      <div id="verify-result" class="result" style="display: none;"></div>
+    </div>
+
+    <!-- Debug Log -->
+    <div class="card">
+      <h2>
+        📋 Debug Log
+        <button class="clear-btn" onclick="clearLog()">Clear</button>
+      </h2>
+      <div class="log-container" id="log-container">
+        <div class="log-entry">
+          <span class="log-time">--:--:--</span>
+          <span class="log-msg info">Waiting for actions...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Script embed code -->
+    <div class="card">
+      <h2>📝 Mã nhúng Widget</h2>
+      <p>Copy đoạn code này vào footer của trang đích:</p>
+      <div class="info-box" id="embed-code">&lt;script src="https://betraffic-production.up.railway.app/widget.js?siteKey=SITE_ME4MZQ29"&gt;&lt;/script&gt;</div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'https://betraffic-production.up.railway.app';
+    const DEFAULT_SITE_KEY = 'SITE_ME4MZQ29'; // Site chouchouphuquoc
+    
+    let currentTask = null;
+
+    // Generate fingerprint (same algorithm as widget)
+    // Chỉ dùng các thuộc tính ỔN ĐỊNH - không thay đổi theo zoom/cửa sổ
+    // ĐÃ BỎ: devicePixelRatio vì nó thay đổi theo browser zoom level
+    function getFingerprint() {
+      const dataArray = [
+        screen.width,           // Độ phân giải màn hình - ổn định
+        screen.height,          // Độ phân giải màn hình - ổn định
+        screen.colorDepth,      // Độ sâu màu - phần cứng
+        Intl.DateTimeFormat().resolvedOptions().timeZone,  // Timezone - hệ thống
+        new Date().getTimezoneOffset(),  // Timezone offset - hệ thống
+        navigator.hardwareConcurrency || 0,  // CPU cores - phần cứng
+        navigator.maxTouchPoints || 0   // Touch support - phần cứng
+      ];
+      
+      const data = dataArray.join('|');
+      
+      // Debug log để xem raw data
+      console.log('[Test Widget DEBUG] Fingerprint raw data:', {
+        screenWidth: screen.width,
+        screenHeight: screen.height,
+        colorDepth: screen.colorDepth,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        timezoneOffset: new Date().getTimezoneOffset(),
+        hardwareConcurrency: navigator.hardwareConcurrency || 0,
+        maxTouchPoints: navigator.maxTouchPoints || 0,
+        joinedString: data
+      });
+
+      let hash = 0;
+      for (let i = 0; i < data.length; i++) {
+        const char = data.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      
+      const fp = 'FP_' + Math.abs(hash).toString(36).toUpperCase();
+      console.log('[Test Widget DEBUG] Generated fingerprint:', fp);
+      return fp;
+    }
+
+    // Logger
+    function addLog(msg, type = 'info') {
+      const container = document.getElementById('log-container');
+      const time = new Date().toLocaleTimeString('vi-VN');
+      const entry = document.createElement('div');
+      entry.className = 'log-entry';
+      entry.innerHTML = `
+        <span class="log-time">${time}</span>
+        <span class="log-msg ${type}">${msg}</span>
+      `;
+      container.appendChild(entry);
+      container.scrollTop = container.scrollHeight;
+      
+      // Also log to console
+      console.log(`[${time}] ${msg}`);
+    }
+
+    function clearLog() {
+      document.getElementById('log-container').innerHTML = `
+        <div class="log-entry">
+          <span class="log-time">${new Date().toLocaleTimeString('vi-VN')}</span>
+          <span class="log-msg info">Log cleared</span>
+        </div>
+      `;
+    }
+
+    // Display fingerprint
+    function displayFingerprint() {
+      const fp = getFingerprint();
+      document.getElementById('fingerprint-value').textContent = fp;
+      addLog(`Device Fingerprint: ${fp}`, 'info');
+      return fp;
+    }
+
+    // Test API Health
+    async function testHealth() {
+      const resultDiv = document.getElementById('health-result');
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = '<span class="status loading">⏳ Đang kiểm tra...</span>';
+      addLog('Testing API health...', 'info');
+
+      try {
+        const start = Date.now();
+        const response = await fetch(`${API_BASE}/api/health`);
+        const data = await response.json();
+        const latency = Date.now() - start;
+
+        if (data.status === 'ok') {
+          resultDiv.innerHTML = `
+            <span class="status success">✅ Server OK</span>
+            <p style="margin-top: 8px; font-size: 12px; color: #888;">
+              Latency: ${latency}ms | Time: ${new Date(data.timestamp).toLocaleString('vi-VN')}
+            </p>
+          `;
+          addLog(`✅ API Health OK - Latency: ${latency}ms`, 'success');
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <span class="status error">❌ Lỗi kết nối</span>
+          <p style="margin-top: 8px; font-size: 12px; color: #F44336;">${error.message}</p>
+        `;
+        addLog(`❌ API Health failed: ${error.message}`, 'error');
+      }
+    }
+
+    // Create Task
+    async function createTask() {
+      const resultDiv = document.getElementById('task-result');
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = '<span class="status loading">⏳ Đang tạo nhiệm vụ...</span>';
+      
+      const fingerprint = getFingerprint();
+      addLog(`Creating task with fingerprint: ${fingerprint}`, 'info');
+
+      try {
+        const response = await fetch(`${API_BASE}/api/tasks/create-test`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fingerprint: fingerprint,
+            siteKey: DEFAULT_SITE_KEY
+          })
+        });
+
+        const data = await response.json();
+        addLog(`Response: ${JSON.stringify(data)}`, 'info');
+
+        if (data.success) {
+          currentTask = data.task;
+          
+          resultDiv.innerHTML = `
+            <span class="status success">✅ Nhiệm vụ đã tạo!</span>
+            <div class="task-info" style="margin-top: 10px;">
+              <p>📌 <strong>Task ID:</strong> ${data.task._id}</p>
+              <p>📊 <strong>Status:</strong> ${data.task.status}</p>
+            </div>
+          `;
+          
+          // Update target site info
+          document.getElementById('target-site-info').style.display = 'block';
+          document.getElementById('site-name').textContent = data.task.siteName || 'Chou Chou Phu Quoc';
+          document.getElementById('site-url').textContent = data.task.siteUrl || 'https://chouchouphuquoc.com.vn/';
+          document.getElementById('site-url').href = data.task.siteUrl || 'https://chouchouphuquoc.com.vn/';
+          document.getElementById('site-key').textContent = data.task.siteKey || DEFAULT_SITE_KEY;
+          document.getElementById('open-site-btn').disabled = false;
+          
+          addLog(`✅ Task created: ${data.task._id}`, 'success');
+          addLog(`🌐 Target site: ${data.task.siteName}`, 'info');
+        } else {
+          resultDiv.innerHTML = `
+            <span class="status error">❌ Lỗi</span>
+            <p style="margin-top: 8px; font-size: 12px; color: #F44336;">${data.message}</p>
+          `;
+          addLog(`❌ Create task failed: ${data.message}`, 'error');
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <span class="status error">❌ Lỗi kết nối</span>
+          <p style="margin-top: 8px; font-size: 12px; color: #F44336;">${error.message}</p>
+        `;
+        addLog(`❌ Create task error: ${error.message}`, 'error');
+      }
+    }
+
+    // Open target site
+    function openTargetSite() {
+      const url = document.getElementById('site-url').href;
+      addLog(`Opening target site: ${url}`, 'info');
+      addLog(`⚠️ Widget should appear on target site if fingerprint matches`, 'warn');
+      window.open(url, '_blank');
+    }
+
+    // Verify Code
+    async function verifyCode() {
+      const code = document.getElementById('verify-code').value.trim().toUpperCase();
+      const resultDiv = document.getElementById('verify-result');
+      
+      if (!code) {
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = '<span class="status error">❌ Vui lòng nhập mã xác nhận</span>';
+        return;
+      }
+
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = '<span class="status loading">⏳ Đang xác nhận...</span>';
+      
+      const fingerprint = getFingerprint();
+      addLog(`Verifying code: ${code} with fingerprint: ${fingerprint}`, 'info');
+
+      try {
+        const response = await fetch(`${API_BASE}/api/codes/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            code: code,
+            fingerprint: fingerprint
+          })
+        });
+
+        const data = await response.json();
+        addLog(`Verify response: ${JSON.stringify(data)}`, 'info');
+
+        if (data.success) {
+          resultDiv.innerHTML = `
+            <span class="status success">✅ Mã hợp lệ!</span>
+            <div class="task-info" style="margin-top: 10px;">
+              <p>🎉 <strong>Xác nhận thành công!</strong></p>
+              <p>📊 Task đã hoàn thành</p>
+            </div>
+          `;
+          addLog(`✅ Code verified successfully!`, 'success');
+          
+          // Clear input
+          document.getElementById('verify-code').value = '';
+        } else {
+          resultDiv.innerHTML = `
+            <span class="status error">❌ ${data.message || 'Mã không hợp lệ'}</span>
+          `;
+          addLog(`❌ Code verification failed: ${data.message}`, 'error');
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <span class="status error">❌ Lỗi kết nối</span>
+          <p style="margin-top: 8px; font-size: 12px; color: #F44336;">${error.message}</p>
+        `;
+        addLog(`❌ Verify error: ${error.message}`, 'error');
+      }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      displayFingerprint();
+      addLog('Page loaded - Ready to test', 'success');
+    });
+  </script>
+</body>
+</html>
+</attachment>
+</attachments>
+<context>
+The current date is January 30, 2026.
+Terminals:
+Terminal: powershell
+Terminal: powershell
+Last Command: npm i
+Cwd: D:\An\IQ_test_traficBoost\client
+Exit Code: 0
+
+</context>
+<editorContext>
+The user's current file is d:\An\IQ_test_traficBoost\client\.gitignore. 
+</editorContext>
+<reminderInstructions>
+You are an agent - you must keep going until the user's query is completely resolved, before ending your turn and yielding back to the user. ONLY terminate your turn when you are sure that the problem is solved, or you absolutely cannot continue.
+You take action when possible- the user is expecting YOU to take action and go to work for them. Don't ask unnecessary questions about the details if you can simply DO something useful instead.
+
+</reminderInstructions>
+<userRequest>
+giờ tôi muốn deply fe lên vercel, bạn hỗ trợ tôi nhé, lưu ý move test html qua fe và tạo 1 trang riêng hiện trang html test đó để test khi deploy nhé, làm kĩ tránh lỗi có gì cần hỏi cứ hỏi tôi, tôi đã push và link với remote repo rồi
+</userRequest>

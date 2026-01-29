@@ -10,6 +10,7 @@ import AdminDashboard from './pages/admin/Dashboard'
 import AdminSites from './pages/admin/Sites'
 import AdminTests from './pages/admin/Tests'
 import AdminStats from './pages/admin/Stats'
+import TestWidgetPage from './pages/TestWidgetPage'
 import Layout from './components/Layout'
 import Particles from './components/Particles'
 
@@ -52,6 +53,7 @@ function App() {
             <Route path="task/:sessionId" element={<TaskPage />} />
             <Route path="result/:sessionId" element={<Result />} />
           </Route>
+          <Route path="/test-widget" element={<TestWidgetPage />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/sites" element={<AdminSites />} />
