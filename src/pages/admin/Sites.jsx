@@ -5,7 +5,7 @@ import {
   FiGlobe, FiPlus, FiEdit2, FiTrash2, FiCopy, 
   FiCheck, FiX, FiExternalLink, FiCode, FiPieChart,
   FiFileText, FiBarChart2, FiLogOut, FiMenu, FiRefreshCw,
-  FiTarget, FiTrendingUp, FiList
+  FiTarget, FiTrendingUp, FiList, FiUpload, FiLink
 } from 'react-icons/fi'
 import toast from 'react-hot-toast'
 import api from '../../services/api'
@@ -119,6 +119,28 @@ const AdminSites = () => {
   const getWidgetCode = (site) => {
     const serverUrl = 'https://betraffic-production.up.railway.app'
     return `<script src="${serverUrl}/widget.js?siteKey=${site.siteKey}"></script>`
+  }
+
+  // Upload image handler
+  const handleImageUpload = async (file, field) => {
+    if (!file) return
+    
+    const formDataUpload = new FormData()
+    formDataUpload.append('image', file)
+    
+    try {
+      toast.loading('Đang upload ảnh...', { id: 'upload' })
+      const response = await api.post('/api/upload', formDataUpload, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      
+      if (response.data.success) {
+        setFormData(prev => ({ ...prev, [field]: response.data.url }))
+        toast.success('Upload thành công!', { id: 'upload' })
+      }
+    } catch (error) {
+      toast.error('Upload thất bại: ' + (error.response?.data?.message || error.message), { id: 'upload' })
+    }
   }
 
   const handleLogout = () => {
@@ -452,42 +474,100 @@ const AdminSites = () => {
                 </div>
                 <div>
                   <label className="block text-white/80 text-sm mb-2">
-                    Ảnh minh họa Bước 2 - Truy cập website (URL)
+                    Ảnh minh họa Bước 2 - Truy cập website
                   </label>
-                  <input
-                    type="text"
-                    value={formData.step2Image}
-                    onChange={e => setFormData({ ...formData, step2Image: e.target.value })}
-                    placeholder="https://example.com/image.jpg"
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-purple-500"
-                  />
-                  {formData.step2Image && (
-                    <img 
-                      src={formData.step2Image} 
-                      alt="Preview" 
-                      className="mt-2 max-h-32 rounded-lg" 
-                      onError={(e) => e.target.style.display = 'none'}
+                  <div className="flex gap-2 mb-2">
+                    <label className="flex-1 cursor-pointer">
+                      <div className="flex items-center justify-center gap-2 px-4 py-3 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded-xl text-purple-400 transition-all">
+                        <FiUpload className="w-4 h-4" />
+                        <span>Upload ảnh</span>
+                      </div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => handleImageUpload(e.target.files[0], 'step2Image')}
+                      />
+                    </label>
+                    <span className="flex items-center text-white/40">hoặc</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="flex items-center px-3 bg-white/5 border border-white/10 rounded-l-xl text-white/40">
+                      <FiLink className="w-4 h-4" />
+                    </div>
+                    <input
+                      type="text"
+                      value={formData.step2Image}
+                      onChange={e => setFormData({ ...formData, step2Image: e.target.value })}
+                      placeholder="Nhập URL ảnh..."
+                      className="flex-1 px-4 py-3 bg-white/5 border border-white/10 border-l-0 rounded-r-xl text-white focus:outline-none focus:border-purple-500"
                     />
+                  </div>
+                  {formData.step2Image && (
+                    <div className="mt-2 relative inline-block">
+                      <img 
+                        src={formData.step2Image} 
+                        alt="Preview" 
+                        className="max-h-32 rounded-lg border border-white/10" 
+                        onError={(e) => e.target.style.display = 'none'}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, step2Image: '' })}
+                        className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600"
+                      >
+                        <FiX className="w-4 h-4" />
+                      </button>
+                    </div>
                   )}
                 </div>
                 <div>
                   <label className="block text-white/80 text-sm mb-2">
-                    Ảnh minh họa Bước 3 - Lấy mã xác nhận (URL)
+                    Ảnh minh họa Bước 3 - Lấy mã xác nhận
                   </label>
-                  <input
-                    type="text"
-                    value={formData.step3Image}
-                    onChange={e => setFormData({ ...formData, step3Image: e.target.value })}
-                    placeholder="https://example.com/image.jpg"
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-purple-500"
-                  />
-                  {formData.step3Image && (
-                    <img 
-                      src={formData.step3Image} 
-                      alt="Preview" 
-                      className="mt-2 max-h-32 rounded-lg" 
-                      onError={(e) => e.target.style.display = 'none'}
+                  <div className="flex gap-2 mb-2">
+                    <label className="flex-1 cursor-pointer">
+                      <div className="flex items-center justify-center gap-2 px-4 py-3 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded-xl text-purple-400 transition-all">
+                        <FiUpload className="w-4 h-4" />
+                        <span>Upload ảnh</span>
+                      </div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => handleImageUpload(e.target.files[0], 'step3Image')}
+                      />
+                    </label>
+                    <span className="flex items-center text-white/40">hoặc</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="flex items-center px-3 bg-white/5 border border-white/10 rounded-l-xl text-white/40">
+                      <FiLink className="w-4 h-4" />
+                    </div>
+                    <input
+                      type="text"
+                      value={formData.step3Image}
+                      onChange={e => setFormData({ ...formData, step3Image: e.target.value })}
+                      placeholder="Nhập URL ảnh..."
+                      className="flex-1 px-4 py-3 bg-white/5 border border-white/10 border-l-0 rounded-r-xl text-white focus:outline-none focus:border-purple-500"
                     />
+                  </div>
+                  {formData.step3Image && (
+                    <div className="mt-2 relative inline-block">
+                      <img 
+                        src={formData.step3Image} 
+                        alt="Preview" 
+                        className="max-h-32 rounded-lg border border-white/10" 
+                        onError={(e) => e.target.style.display = 'none'}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, step3Image: '' })}
+                        className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600"
+                      >
+                        <FiX className="w-4 h-4" />
+                      </button>
+                    </div>
                   )}
                 </div>
                 <div className="flex items-center gap-2">
