@@ -194,6 +194,7 @@ const TaskPage = () => {
                       src={task.step2Image} 
                       alt="Hướng dẫn bước 2" 
                       className="rounded-lg border border-white/10 max-w-full h-auto"
+                      onError={(e) => e.target.style.display = 'none'}
                     />
                   </div>
                 )}
@@ -216,6 +217,7 @@ const TaskPage = () => {
                       src={task.step3Image} 
                       alt="Hướng dẫn bước 3" 
                       className="rounded-lg border border-white/10 max-w-full h-auto"
+                      onError={(e) => e.target.style.display = 'none'}
                     />
                   </div>
                 )}

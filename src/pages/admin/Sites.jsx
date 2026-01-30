@@ -462,7 +462,12 @@ const AdminSites = () => {
                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-purple-500"
                   />
                   {formData.step2Image && (
-                    <img src={formData.step2Image} alt="Preview" className="mt-2 max-h-32 rounded-lg" />
+                    <img 
+                      src={formData.step2Image} 
+                      alt="Preview" 
+                      className="mt-2 max-h-32 rounded-lg" 
+                      onError={(e) => e.target.style.display = 'none'}
+                    />
                   )}
                 </div>
                 <div>
@@ -477,7 +482,12 @@ const AdminSites = () => {
                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-purple-500"
                   />
                   {formData.step3Image && (
-                    <img src={formData.step3Image} alt="Preview" className="mt-2 max-h-32 rounded-lg" />
+                    <img 
+                      src={formData.step3Image} 
+                      alt="Preview" 
+                      className="mt-2 max-h-32 rounded-lg" 
+                      onError={(e) => e.target.style.display = 'none'}
+                    />
                   )}
                 </div>
                 <div className="flex items-center gap-2">
