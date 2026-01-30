@@ -10,6 +10,7 @@ const TestList = () => {
   const navigate = useNavigate()
   const [tests, setTests] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   const isIQ = type === 'iq'
   const gradientFrom = isIQ ? 'from-blue-500' : 'from-orange-500'
@@ -24,63 +25,18 @@ const TestList = () => {
   const fetchTests = async () => {
     try {
       setLoading(true)
-      const response = await api.get(`/api/tests/${type}`)
-      setTests(response.data)
+      setError(null)
+      // Đúng endpoint: /api/tests/type/:type
+      const response = await api.get(`/api/tests/type/${type}`)
+      if (response.data.success && response.data.tests) {
+        setTests(response.data.tests)
+      } else {
+        setTests([])
+      }
     } catch (error) {
       console.error('Error fetching tests:', error)
-      // Demo data if API fails
-      setTests([
-        {
-          _id: '1',
-          name: isIQ ? 'Logical Reasoning' : 'Self-Awareness',
-          description: isIQ 
-            ? 'Đánh giá khả năng suy luận logic và nhận diện mẫu hình' 
-            : 'Khám phá mức độ nhận thức về cảm xúc của bản thân',
-          difficulty: 'easy',
-          duration: 15,
-          questionCount: 20,
-        },
-        {
-          _id: '2',
-          name: isIQ ? 'Number Sequences' : 'Empathy',
-          description: isIQ 
-            ? 'Test khả năng phân tích dãy số và quy luật' 
-            : 'Đánh giá khả năng thấu hiểu và đồng cảm với người khác',
-          difficulty: 'medium',
-          duration: 15,
-          questionCount: 20,
-        },
-        {
-          _id: '3',
-          name: isIQ ? 'Visual Patterns' : 'Social Skills',
-          description: isIQ 
-            ? 'Đánh giá tư duy không gian và hình học' 
-            : 'Kiểm tra kỹ năng giao tiếp và tương tác xã hội',
-          difficulty: 'medium',
-          duration: 15,
-          questionCount: 20,
-        },
-        {
-          _id: '4',
-          name: isIQ ? 'Word Analogies' : 'Emotion Management',
-          description: isIQ 
-            ? 'Test khả năng suy luận từ ngữ và mối quan hệ' 
-            : 'Đánh giá khả năng kiểm soát và điều tiết cảm xúc',
-          difficulty: 'medium',
-          duration: 15,
-          questionCount: 20,
-        },
-        {
-          _id: '5',
-          name: isIQ ? 'Advanced Logic' : 'Relationship IQ',
-          description: isIQ 
-            ? 'Bài test tổng hợp nâng cao cho những ai tự tin' 
-            : 'Đánh giá trí tuệ trong các mối quan hệ',
-          difficulty: 'hard',
-          duration: 20,
-          questionCount: 20,
-        },
-      ])
+      setError('Không thể tải danh sách bài test. Vui lòng thử lại.')
+      setTests([])
     } finally {
       setLoading(false)
     }
@@ -169,6 +125,26 @@ const TestList = () => {
         {loading ? (
           <div className="flex justify-center py-20">
             <div className="w-16 h-16 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
+          </div>
+        ) : error ? (
+          <div className="text-center py-20">
+            <p className="text-red-400 mb-4">{error}</p>
+            <button 
+              onClick={fetchTests}
+              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+            >
+              Thử lại
+            </button>
+          </div>
+        ) : tests.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-slate-400 text-lg mb-4">Chưa có bài test {type.toUpperCase()} nào.</p>
+            <Link 
+              to="/"
+              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 inline-block"
+            >
+              Quay về trang chủ
+            </Link>
           </div>
         ) : (
           <motion.div
