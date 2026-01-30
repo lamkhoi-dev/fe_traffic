@@ -57,9 +57,10 @@ const AdminTasks = () => {
   const fetchSites = async () => {
     try {
       const response = await api.get('/api/sites')
-      setSites(response.data || [])
+      setSites(response.data?.sites || response.data || [])
     } catch (error) {
       console.error('Error fetching sites:', error)
+      setSites([])
     }
   }
 
@@ -73,9 +74,11 @@ const AdminTasks = () => {
       
       const response = await api.get(`/api/tasks/admin/list?${params}`)
       if (response.data.success) {
-        setTasks(response.data.tasks)
-        setStats(response.data.stats)
+        setTasks(response.data.tasks || [])
+        setStats(response.data.stats || {})
         setLastUpdate(new Date())
+      } else {
+        setTasks([])
       }
     } catch (error) {
       console.error('Error fetching tasks:', error)
@@ -89,12 +92,13 @@ const AdminTasks = () => {
     try {
       const response = await api.get('/api/tasks/admin/realtime-stats')
       if (response.data.success) {
-        setStats(response.data.stats)
-        setTasks(response.data.recentTasks)
+        setStats(response.data.stats || {})
+        setTasks(response.data.recentTasks || [])
         setLastUpdate(new Date(response.data.timestamp))
       }
     } catch (error) {
       console.error('Error fetching realtime stats:', error)
+      // Don't crash on error, just keep existing state
     }
   }, [])
 

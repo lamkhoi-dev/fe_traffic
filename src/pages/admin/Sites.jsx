@@ -23,6 +23,8 @@ const AdminSites = () => {
     url: '',
     searchKeyword: '',
     instruction: '',
+    step2Image: '',
+    step3Image: '',
     isActive: true,
     quota: 0,
     priority: 1
@@ -61,7 +63,7 @@ const AdminSites = () => {
       }
       setShowModal(false)
       setEditingSite(null)
-      setFormData({ name: '', domain: '', url: '', searchKeyword: '', instruction: '', isActive: true, quota: 0, priority: 1 })
+      setFormData({ name: '', domain: '', url: '', searchKeyword: '', instruction: '', step2Image: '', step3Image: '', isActive: true, quota: 0, priority: 1 })
       fetchSites()
     } catch (error) {
       toast.error(error.response?.data?.message || 'Có lỗi xảy ra')
@@ -76,6 +78,8 @@ const AdminSites = () => {
       url: site.url,
       searchKeyword: site.searchKeyword,
       instruction: site.instruction,
+      step2Image: site.step2Image || '',
+      step3Image: site.step3Image || '',
       isActive: site.isActive,
       quota: site.quota || 0,
       priority: site.priority || 1
@@ -451,6 +455,36 @@ const AdminSites = () => {
                     rows={3}
                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-purple-500"
                   />
+                </div>
+                <div>
+                  <label className="block text-white/80 text-sm mb-2">
+                    Ảnh minh họa Bước 2 - Truy cập website (URL)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.step2Image}
+                    onChange={e => setFormData({ ...formData, step2Image: e.target.value })}
+                    placeholder="https://example.com/image.jpg"
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-purple-500"
+                  />
+                  {formData.step2Image && (
+                    <img src={formData.step2Image} alt="Preview" className="mt-2 max-h-32 rounded-lg" />
+                  )}
+                </div>
+                <div>
+                  <label className="block text-white/80 text-sm mb-2">
+                    Ảnh minh họa Bước 3 - Lấy mã xác nhận (URL)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.step3Image}
+                    onChange={e => setFormData({ ...formData, step3Image: e.target.value })}
+                    placeholder="https://example.com/image.jpg"
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-purple-500"
+                  />
+                  {formData.step3Image && (
+                    <img src={formData.step3Image} alt="Preview" className="mt-2 max-h-32 rounded-lg" />
+                  )}
                 </div>
                 <div className="flex items-center gap-2">
                   <input

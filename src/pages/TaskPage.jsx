@@ -183,11 +183,20 @@ const TaskPage = () => {
                               text-purple-400 font-bold flex-shrink-0">
                 2
               </span>
-              <div>
+              <div className="flex-1">
                 <h3 className="font-semibold text-white mb-1">Truy cập website</h3>
                 <p className="text-slate-400 text-sm">
                   Tìm và click vào kết quả <strong className="text-white">{task?.siteName}</strong>
                 </p>
+                {task?.step2Image && (
+                  <div className="mt-3">
+                    <img 
+                      src={task.step2Image} 
+                      alt="Hướng dẫn bước 2" 
+                      className="rounded-lg border border-white/10 max-w-full h-auto"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
@@ -196,11 +205,20 @@ const TaskPage = () => {
                               text-pink-400 font-bold flex-shrink-0">
                 3
               </span>
-              <div>
+              <div className="flex-1">
                 <h3 className="font-semibold text-white mb-1">Lấy mã xác nhận</h3>
                 <p className="text-slate-400 text-sm">
                   Cuộn xuống footer, bấm vào chữ "Mã Code" và đợi 60 giây để nhận mã xác nhận
                 </p>
+                {task?.step3Image && (
+                  <div className="mt-3">
+                    <img 
+                      src={task.step3Image} 
+                      alt="Hướng dẫn bước 3" 
+                      className="rounded-lg border border-white/10 max-w-full h-auto"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
