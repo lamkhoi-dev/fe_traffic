@@ -27,6 +27,7 @@ const TaskPage = () => {
     try {
       setLoading(true)
       const response = await api.get(`/api/sessions/${sessionId}/task`)
+      console.log('Task data:', response.data)
       setTask(response.data)
     } catch (error) {
       console.error('Error fetching task:', error)
@@ -192,7 +193,7 @@ const TaskPage = () => {
               <div>
                 <h3 className="font-semibold text-white mb-1">Lấy mã xác nhận</h3>
                 <p className="text-slate-400 text-sm">
-                  Cuộn trang, bấm nút "Lấy mã" và đợi 60 giây để nhận mã xác nhận
+                  Cuộn xuống footer, bấm vào chữ "Mã Code" và đợi 60 giây để nhận mã xác nhận
                 </p>
               </div>
             </div>
