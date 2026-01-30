@@ -5,7 +5,7 @@ import {
   FiGlobe, FiPlus, FiEdit2, FiTrash2, FiCopy, 
   FiCheck, FiX, FiExternalLink, FiCode, FiPieChart,
   FiFileText, FiBarChart2, FiLogOut, FiMenu, FiRefreshCw,
-  FiTarget, FiTrendingUp
+  FiTarget, FiTrendingUp, FiList
 } from 'react-icons/fi'
 import toast from 'react-hot-toast'
 import api from '../../services/api'
@@ -137,6 +137,7 @@ const AdminSites = () => {
     { label: 'Quản lý Sites', icon: FiGlobe, path: '/admin/sites', active: true },
     { label: 'Quản lý Tests', icon: FiFileText, path: '/admin/tests' },
     { label: 'Quản lý Questions', icon: FiBarChart2, path: '/admin/questions' },
+    { label: 'Quản lý Tasks', icon: FiList, path: '/admin/tasks' },
     { label: 'Thống kê', icon: FiTrendingUp, path: '/admin/stats' },
   ]
 

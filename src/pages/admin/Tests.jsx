@@ -127,6 +127,7 @@ const AdminTests = () => {
     { label: 'Quản lý Sites', icon: FiGlobe, path: '/admin/sites' },
     { label: 'Quản lý Tests', icon: FiFileText, path: '/admin/tests', active: true },
     { label: 'Quản lý Questions', icon: FiList, path: '/admin/questions' },
+    { label: 'Quản lý Tasks', icon: FiBarChart2, path: '/admin/tasks' },
     { label: 'Thống kê', icon: FiTrendingUp, path: '/admin/stats' },
   ]
 
