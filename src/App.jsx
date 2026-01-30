@@ -9,6 +9,7 @@ import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminSites from './pages/admin/Sites'
 import AdminTests from './pages/admin/Tests'
+import AdminQuestions from './pages/admin/Questions'
 import AdminStats from './pages/admin/Stats'
 import TestWidgetPage from './pages/TestWidgetPage'
 import Layout from './components/Layout'
@@ -58,6 +59,7 @@ function App() {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/sites" element={<AdminSites />} />
           <Route path="/admin/tests" element={<AdminTests />} />
+          <Route path="/admin/questions" element={<AdminQuestions />} />
           <Route path="/admin/stats" element={<AdminStats />} />
         </Routes>
       </div>

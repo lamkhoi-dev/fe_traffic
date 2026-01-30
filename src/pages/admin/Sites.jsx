@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { 
   FiGlobe, FiPlus, FiEdit2, FiTrash2, FiCopy, 
   FiCheck, FiX, FiExternalLink, FiCode, FiPieChart,
-  FiFileText, FiBarChart2, FiLogOut, FiMenu
+  FiFileText, FiBarChart2, FiLogOut, FiMenu, FiRefreshCw,
+  FiTarget, FiTrendingUp
 } from 'react-icons/fi'
 import toast from 'react-hot-toast'
 import api from '../../services/api'
@@ -22,7 +23,9 @@ const AdminSites = () => {
     url: '',
     searchKeyword: '',
     instruction: '',
-    isActive: true
+    isActive: true,
+    quota: 0,
+    priority: 1
   })
   const navigate = useNavigate()
 
@@ -58,7 +61,7 @@ const AdminSites = () => {
       }
       setShowModal(false)
       setEditingSite(null)
-      setFormData({ name: '', domain: '', url: '', searchKeyword: '', instruction: '', isActive: true })
+      setFormData({ name: '', domain: '', url: '', searchKeyword: '', instruction: '', isActive: true, quota: 0, priority: 1 })
       fetchSites()
     } catch (error) {
       toast.error(error.response?.data?.message || 'Có lỗi xảy ra')
@@ -73,7 +76,9 @@ const AdminSites = () => {
       url: site.url,
       searchKeyword: site.searchKeyword,
       instruction: site.instruction,
-      isActive: site.isActive
+      isActive: site.isActive,
+      quota: site.quota || 0,
+      priority: site.priority || 1
     })
     setShowModal(true)
   }
@@ -89,13 +94,26 @@ const AdminSites = () => {
     }
   }
 
+  const handleResetQuota = async (site) => {
+    const newQuota = prompt(`Nhập quota mới cho ${site.name}:`, site.quota || 0)
+    if (newQuota === null) return
+    
+    try {
+      await api.post(`/api/sites/${site._id}/reset-quota`, { newQuota: parseInt(newQuota) || 0 })
+      toast.success('Reset quota thành công!')
+      fetchSites()
+    } catch (error) {
+      toast.error('Không thể reset quota')
+    }
+  }
+
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text)
     toast.success('Đã copy!')
   }
 
   const getWidgetCode = (site) => {
-    const serverUrl = window.location.origin.replace(':5173', ':5000')
+    const serverUrl = 'https://betraffic-production.up.railway.app'
     return `<!-- IQ Test Traffic Widget -->
 <script 
   src="${serverUrl}/widget.js" 
@@ -111,11 +129,15 @@ const AdminSites = () => {
     navigate('/admin')
   }
 
+  // Calculate total priority for percentage display
+  const totalPriority = sites.reduce((sum, s) => sum + (s.priority || 1), 0)
+
   const menuItems = [
     { label: 'Dashboard', icon: FiPieChart, path: '/admin/dashboard' },
     { label: 'Quản lý Sites', icon: FiGlobe, path: '/admin/sites', active: true },
     { label: 'Quản lý Tests', icon: FiFileText, path: '/admin/tests' },
-    { label: 'Thống kê', icon: FiBarChart2, path: '/admin/stats' },
+    { label: 'Quản lý Questions', icon: FiBarChart2, path: '/admin/questions' },
+    { label: 'Thống kê', icon: FiTrendingUp, path: '/admin/stats' },
   ]
 
   return (
@@ -179,7 +201,7 @@ const AdminSites = () => {
           <button
             onClick={() => {
               setEditingSite(null)
-              setFormData({ name: '', domain: '', url: '', searchKeyword: '', instruction: '', isActive: true })
+              setFormData({ name: '', domain: '', url: '', searchKeyword: '', instruction: '', isActive: true, quota: 0, priority: 1 })
               setShowModal(true)
             }}
             className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl text-white font-medium hover:shadow-lg hover:shadow-purple-500/30 transition-all"
@@ -229,17 +251,57 @@ const AdminSites = () => {
                       </div>
                     </div>
 
+                    {/* Quota & Priority Stats */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 p-4 bg-white/5 rounded-xl">
+                      <div className="text-center">
+                        <div className="flex items-center justify-center gap-1 text-yellow-400 mb-1">
+                          <FiTarget className="w-4 h-4" />
+                          <span className="text-xs">Quota</span>
+                        </div>
+                        <p className="text-white font-bold">
+                          {site.quota === 0 ? '∞' : site.remainingQuota + ' / ' + site.quota}
+                        </p>
+                        <p className="text-white/40 text-xs">
+                          {site.quota === 0 ? 'Unlimited' : `Còn ${site.remainingQuota}`}
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <div className="flex items-center justify-center gap-1 text-blue-400 mb-1">
+                          <FiPieChart className="w-4 h-4" />
+                          <span className="text-xs">Priority</span>
+                        </div>
+                        <p className="text-white font-bold">{site.priority || 1}</p>
+                        <p className="text-white/40 text-xs">
+                          ~{totalPriority > 0 ? Math.round(((site.priority || 1) / totalPriority) * 100) : 0}% traffic
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <div className="flex items-center justify-center gap-1 text-green-400 mb-1">
+                          <FiCheck className="w-4 h-4" />
+                          <span className="text-xs">Hoàn thành</span>
+                        </div>
+                        <p className="text-white font-bold">{site.totalCompleted || 0}</p>
+                      </div>
+                      <div className="text-center">
+                        <div className="flex items-center justify-center gap-1 text-purple-400 mb-1">
+                          <FiTrendingUp className="w-4 h-4" />
+                          <span className="text-xs">Visits</span>
+                        </div>
+                        <p className="text-white font-bold">{site.totalVisits || 0}</p>
+                      </div>
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div>
                         <p className="text-white/40 text-sm mb-1">URL</p>
-                        <a href={site.url} target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 flex items-center gap-1">
+                        <a href={site.url} target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 flex items-center gap-1 text-sm">
                           {site.url} <FiExternalLink className="w-4 h-4" />
                         </a>
                       </div>
                       <div>
                         <p className="text-white/40 text-sm mb-1">Site Key</p>
                         <div className="flex items-center gap-2">
-                          <code className="text-white/80 bg-white/10 px-2 py-1 rounded">{site.siteKey}</code>
+                          <code className="text-white/80 bg-white/10 px-2 py-1 rounded text-sm">{site.siteKey}</code>
                           <button onClick={() => copyToClipboard(site.siteKey)} className="text-white/40 hover:text-white">
                             <FiCopy className="w-4 h-4" />
                           </button>
@@ -247,24 +309,31 @@ const AdminSites = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3 pt-4 border-t border-white/10">
+                    <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-white/10">
                       <button
                         onClick={() => setShowCodeModal(site)}
-                        className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-all"
+                        className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-all text-sm"
                       >
                         <FiCode className="w-4 h-4" />
-                        Lấy mã Widget
+                        Widget
+                      </button>
+                      <button
+                        onClick={() => handleResetQuota(site)}
+                        className="flex items-center gap-2 px-4 py-2 bg-yellow-500/20 hover:bg-yellow-500/30 rounded-xl text-yellow-400 transition-all text-sm"
+                      >
+                        <FiRefreshCw className="w-4 h-4" />
+                        Reset Quota
                       </button>
                       <button
                         onClick={() => handleEdit(site)}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-xl text-blue-400 transition-all"
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-xl text-blue-400 transition-all text-sm"
                       >
                         <FiEdit2 className="w-4 h-4" />
                         Sửa
                       </button>
                       <button
                         onClick={() => handleDelete(site._id)}
-                        className="flex items-center gap-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-xl text-red-400 transition-all"
+                        className="flex items-center gap-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-xl text-red-400 transition-all text-sm"
                       >
                         <FiTrash2 className="w-4 h-4" />
                         Xóa
@@ -292,7 +361,7 @@ const AdminSites = () => {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-800 rounded-2xl p-6 w-full max-w-lg border border-white/10"
+              className="bg-slate-800 rounded-2xl p-6 w-full max-w-lg border border-white/10 max-h-[90vh] overflow-y-auto"
               onClick={e => e.stopPropagation()}
             >
               <h3 className="text-xl font-bold text-white mb-6">
@@ -300,7 +369,7 @@ const AdminSites = () => {
               </h3>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-white/80 text-sm mb-2">Tên site</label>
+                  <label className="block text-white/80 text-sm mb-2">Tên site *</label>
                   <input
                     type="text"
                     value={formData.name}
@@ -310,7 +379,7 @@ const AdminSites = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-white/80 text-sm mb-2">Domain</label>
+                  <label className="block text-white/80 text-sm mb-2">Domain *</label>
                   <input
                     type="text"
                     value={formData.domain}
@@ -321,7 +390,7 @@ const AdminSites = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-white/80 text-sm mb-2">URL</label>
+                  <label className="block text-white/80 text-sm mb-2">URL *</label>
                   <input
                     type="url"
                     value={formData.url}
@@ -331,6 +400,38 @@ const AdminSites = () => {
                     required
                   />
                 </div>
+                
+                {/* Quota & Priority */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-white/80 text-sm mb-2">
+                      Quota <span className="text-white/40">(0 = unlimited)</span>
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={formData.quota}
+                      onChange={e => setFormData({ ...formData, quota: parseInt(e.target.value) || 0 })}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-purple-500"
+                    />
+                    <p className="text-white/40 text-xs mt-1">Số traffic cần chạy</p>
+                  </div>
+                  <div>
+                    <label className="block text-white/80 text-sm mb-2">
+                      Priority <span className="text-white/40">(1-100)</span>
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="100"
+                      value={formData.priority}
+                      onChange={e => setFormData({ ...formData, priority: parseInt(e.target.value) || 1 })}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-purple-500"
+                    />
+                    <p className="text-white/40 text-xs mt-1">Tỉ lệ phân bổ traffic</p>
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-white/80 text-sm mb-2">Từ khóa tìm kiếm (SEO)</label>
                   <input

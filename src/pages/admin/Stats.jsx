@@ -50,7 +50,8 @@ const AdminStats = () => {
     { label: 'Dashboard', icon: FiPieChart, path: '/admin/dashboard' },
     { label: 'Quản lý Sites', icon: FiGlobe, path: '/admin/sites' },
     { label: 'Quản lý Tests', icon: FiFileText, path: '/admin/tests' },
-    { label: 'Thống kê', icon: FiBarChart2, path: '/admin/stats', active: true },
+    { label: 'Quản lý Questions', icon: FiBarChart2, path: '/admin/questions' },
+    { label: 'Thống kê', icon: FiTrendingUp, path: '/admin/stats', active: true },
   ]
 
   // Calculate bar heights for chart visualization
