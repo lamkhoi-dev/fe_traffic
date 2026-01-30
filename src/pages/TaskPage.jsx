@@ -6,6 +6,7 @@ import {
   FaSearch, FaGlobe, FaKey, FaInfoCircle
 } from 'react-icons/fa'
 import api from '../services/api'
+import { getDeviceFingerprint } from '../utils/fingerprint'
 import toast from 'react-hot-toast'
 
 const TaskPage = () => {
@@ -45,9 +46,11 @@ const TaskPage = () => {
 
     setVerifying(true)
     try {
+      const fingerprint = await getDeviceFingerprint()
       const response = await api.post('/api/codes/verify', {
         sessionId,
-        code: code.trim()
+        code: code.trim(),
+        fingerprint
       })
 
       if (response.data.success) {
