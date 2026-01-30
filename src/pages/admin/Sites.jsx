@@ -118,13 +118,7 @@ const AdminSites = () => {
 
   const getWidgetCode = (site) => {
     const serverUrl = 'https://betraffic-production.up.railway.app'
-    return `<!-- IQ Test Traffic Widget -->
-<script 
-  src="${serverUrl}/widget.js" 
-  data-site-key="${site.siteKey}"
-  data-api-url="${serverUrl}"
-  async>
-</script>`
+    return `<script src="${serverUrl}/widget.js?siteKey=${site.siteKey}"></script>`
   }
 
   const handleLogout = () => {
