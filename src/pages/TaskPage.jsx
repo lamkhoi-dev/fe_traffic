@@ -26,11 +26,17 @@ const TaskPage = () => {
   const fetchTask = async () => {
     try {
       setLoading(true)
+      console.log('[TaskPage] Fetching task for sessionId:', sessionId)
       const response = await api.get(`/api/sessions/${sessionId}/task`)
-      console.log('Task data:', response.data)
+      console.log('[TaskPage] API Response:', response)
+      console.log('[TaskPage] Task data:', response.data)
+      console.log('[TaskPage] searchKeyword:', response.data?.searchKeyword)
+      console.log('[TaskPage] siteName:', response.data?.siteName)
+      console.log('[TaskPage] siteUrl:', response.data?.siteUrl)
       setTask(response.data)
     } catch (error) {
-      console.error('Error fetching task:', error)
+      console.error('[TaskPage] Error fetching task:', error)
+      console.error('[TaskPage] Error response:', error.response)
       toast.error('Không thể tải nhiệm vụ!')
       // Redirect back if no task found
       setTimeout(() => navigate('/'), 2000)

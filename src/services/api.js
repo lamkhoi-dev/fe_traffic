@@ -4,6 +4,10 @@ import axios from 'axios'
 const API_BASE_URL = import.meta.env.VITE_API_URL || 
   (window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://betraffic-production.up.railway.app')
 
+console.log('[API] Base URL:', API_BASE_URL)
+console.log('[API] Hostname:', window.location.hostname)
+console.log('[API] VITE_API_URL:', import.meta.env.VITE_API_URL)
+
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
