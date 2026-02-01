@@ -9,6 +9,8 @@ import GradeSelection from './pages/GradeSelection'
 import SubjectSelection from './pages/SubjectSelection'
 import GradeTestList from './pages/GradeTestList'
 import GradeTest from './pages/GradeTest'
+import AssessmentList from './pages/AssessmentList'
+import AssessmentTest from './pages/AssessmentTest'
 import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminSites from './pages/admin/Sites'
@@ -63,6 +65,9 @@ function App() {
             <Route path="grade/:gradeNum" element={<SubjectSelection />} />
             <Route path="grade/:gradeNum/subject/:subjectId" element={<GradeTestList />} />
             <Route path="grade/:gradeNum/subject/:subjectId/test/:testId" element={<GradeTest />} />
+            {/* Assessment routes */}
+            <Route path="assessment" element={<AssessmentList />} />
+            <Route path="assessment/:assessmentId" element={<AssessmentTest />} />
           </Route>
           <Route path="/test-widget" element={<TestWidgetPage />} />
           <Route path="/admin" element={<AdminLogin />} />

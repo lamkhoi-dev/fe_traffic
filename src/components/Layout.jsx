@@ -68,6 +68,14 @@ const Layout = () => {
                 <span>📚</span>
                 <span className="hidden sm:inline">Bài Thi Học Đường</span>
               </Link>
+              <Link
+                to="/assessment"
+                className="px-4 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 
+                           transition-all duration-300 flex items-center space-x-2"
+              >
+                <span>🎯</span>
+                <span className="hidden sm:inline">Đánh Giá Năng Lực</span>
+              </Link>
             </div>
           </div>
         </div>
