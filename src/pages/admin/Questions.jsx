@@ -18,6 +18,9 @@ const AdminQuestions = () => {
   const [showModal, setShowModal] = useState(false)
   const [editingQuestion, setEditingQuestion] = useState(null)
   const [searchParams] = useSearchParams()
+  const [typeFilter, setTypeFilter] = useState('all')
+  const [showTestDropdown, setShowTestDropdown] = useState(false)
+  const [testSearch, setTestSearch] = useState('')
   
   const [formData, setFormData] = useState({
     type: 'single_choice',
@@ -84,6 +87,48 @@ const AdminQuestions = () => {
     setQuestions([])
     fetchQuestions(test._id)
     navigate(`/admin/questions?testId=${test._id}`, { replace: true })
+    setShowTestDropdown(false)
+    setTestSearch('')
+  }
+
+  // Get unique test types for filter
+  const testTypes = [...new Set(tests.map(t => t.type))].sort()
+  
+  // Filter tests by type and search
+  const filteredTests = tests.filter(t => {
+    const matchType = typeFilter === 'all' || t.type === typeFilter
+    const matchSearch = !testSearch || t.name.toLowerCase().includes(testSearch.toLowerCase())
+    return matchType && matchSearch
+  })
+
+  // Type label helper
+  const getTypeLabel = (type) => {
+    const labels = {
+      'iq': 'IQ Test',
+      'eq': 'EQ Test',
+      'toan': 'Toán học',
+      'ly': 'Vật lý',
+      'hoa': 'Hóa học',
+      'sinh': 'Sinh học',
+      'anh': 'Tiếng Anh',
+      'su': 'Lịch sử',
+      'dia': 'Địa lý',
+      'van': 'Ngữ văn',
+      'mbti': 'MBTI',
+    }
+    return labels[type?.toLowerCase()] || type?.toUpperCase()
+  }
+
+  const getTypeColor = (type) => {
+    const colors = {
+      'iq': 'bg-purple-500/30 text-purple-300',
+      'eq': 'bg-pink-500/30 text-pink-300',
+      'toan': 'bg-blue-500/30 text-blue-300',
+      'ly': 'bg-yellow-500/30 text-yellow-300',
+      'hoa': 'bg-green-500/30 text-green-300',
+      'mbti': 'bg-cyan-500/30 text-cyan-300',
+    }
+    return colors[type?.toLowerCase()] || 'bg-slate-500/30 text-slate-300'
   }
 
   const handleSubmit = async (e) => {
@@ -259,31 +304,108 @@ const AdminQuestions = () => {
 
         {/* Content */}
         <main className="flex-1 p-6 overflow-auto">
-          {/* Test Selector */}
-          <div className="mb-6">
-            <label className="block text-white/60 text-sm mb-2">Chọn Test</label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {tests.map(test => (
-                <button
-                  key={test._id}
-                  onClick={() => handleSelectTest(test)}
-                  className={`p-4 rounded-xl border text-left transition-all ${
-                    selectedTest?._id === test._id
-                      ? 'bg-purple-500/20 border-purple-500/50 text-white'
-                      : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10'
+          {/* Test Selector - Compact */}
+          <div className="mb-6 bg-white/5 rounded-2xl border border-white/10 p-4">
+            <div className="flex flex-wrap items-center gap-4">
+              {/* Type Filter Pills */}
+              <div className="flex items-center gap-2">
+                <span className="text-white/50 text-sm">Loại:</span>
+                <div className="flex flex-wrap gap-1">
+                  <button
+                    onClick={() => setTypeFilter('all')}
+                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                      typeFilter === 'all'
+                        ? 'bg-white/20 text-white'
+                        : 'bg-white/5 text-white/50 hover:bg-white/10'
+                    }`}
+                  >
+                    Tất cả ({tests.length})
+                  </button>
+                  {testTypes.map(type => (
+                    <button
+                      key={type}
+                      onClick={() => setTypeFilter(type)}
+                      className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                        typeFilter === type
+                          ? getTypeColor(type)
+                          : 'bg-white/5 text-white/50 hover:bg-white/10'
+                      }`}
+                    >
+                      {getTypeLabel(type)} ({tests.filter(t => t.type === type).length})
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Test Dropdown */}
+              <div className="flex-1 min-w-[300px] relative">
+                <div
+                  onClick={() => setShowTestDropdown(!showTestDropdown)}
+                  className={`w-full px-4 py-3 bg-white/5 border rounded-xl cursor-pointer flex items-center justify-between transition-all ${
+                    showTestDropdown ? 'border-purple-500' : 'border-white/10 hover:border-white/30'
                   }`}
                 >
-                  <div className="flex items-center gap-2">
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${
-                      test.type === 'iq' ? 'bg-purple-500/30 text-purple-300' : 'bg-pink-500/30 text-pink-300'
-                    }`}>
-                      {test.type.toUpperCase()}
-                    </span>
-                    <span className="text-sm font-medium truncate">{test.name}</span>
-                  </div>
-                  <p className="text-xs text-white/40 mt-1">{test.questionCount} câu hỏi</p>
-                </button>
-              ))}
+                  {selectedTest ? (
+                    <div className="flex items-center gap-2">
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${getTypeColor(selectedTest.type)}`}>
+                        {getTypeLabel(selectedTest.type)}
+                      </span>
+                      <span className="text-white font-medium">{selectedTest.name}</span>
+                      <span className="text-white/40 text-sm">({questions.length} câu)</span>
+                    </div>
+                  ) : (
+                    <span className="text-white/40">-- Chọn Test --</span>
+                  )}
+                  <FiChevronDown className={`w-5 h-5 text-white/50 transition-transform ${showTestDropdown ? 'rotate-180' : ''}`} />
+                </div>
+
+                {/* Dropdown */}
+                <AnimatePresence>
+                  {showTestDropdown && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="absolute z-50 top-full left-0 right-0 mt-2 bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden"
+                    >
+                      {/* Search */}
+                      <div className="p-2 border-b border-white/10">
+                        <input
+                          type="text"
+                          value={testSearch}
+                          onChange={(e) => setTestSearch(e.target.value)}
+                          placeholder="Tìm kiếm test..."
+                          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-purple-500"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      </div>
+                      
+                      {/* Test List */}
+                      <div className="max-h-64 overflow-y-auto">
+                        {filteredTests.length === 0 ? (
+                          <div className="p-4 text-center text-white/40 text-sm">Không tìm thấy test</div>
+                        ) : (
+                          filteredTests.map(test => (
+                            <button
+                              key={test._id}
+                              onClick={() => handleSelectTest(test)}
+                              className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-all hover:bg-white/10 ${
+                                selectedTest?._id === test._id ? 'bg-purple-500/20' : ''
+                              }`}
+                            >
+                              <span className={`text-xs px-2 py-0.5 rounded-full ${getTypeColor(test.type)}`}>
+                                {getTypeLabel(test.type)}
+                              </span>
+                              <span className="text-white flex-1 truncate">{test.name}</span>
+                              <span className="text-white/40 text-xs">{test.questionCount} câu</span>
+                            </button>
+                          ))
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
           </div>
 
