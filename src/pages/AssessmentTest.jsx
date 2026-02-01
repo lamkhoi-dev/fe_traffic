@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaClock, FaCheck, FaTimes, FaArrowRight, FaArrowLeft, FaTrophy, FaRedo, FaHome, FaList } from 'react-icons/fa'
 import { HiAcademicCap, HiSparkles, HiLightningBolt } from 'react-icons/hi'
+import MathText from '../components/MathText'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 
   (window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://betraffic-production.up.railway.app')
@@ -331,7 +332,7 @@ const AssessmentTest = () => {
             {/* Question */}
             <h2 className="text-xl font-semibold text-white mb-6 leading-relaxed">
               <span className="text-purple-400 mr-2">Q{currentIndex + 1}.</span>
-              {currentQuestion?.question}
+              <MathText>{currentQuestion?.question}</MathText>
             </h2>
 
             {/* Options */}
@@ -356,7 +357,7 @@ const AssessmentTest = () => {
                     {option.id || String.fromCharCode(65 + idx)}
                   </span>
                   <span className={`flex-1 ${answers[currentIndex] === idx ? 'text-white' : 'text-slate-300'}`}>
-                    {option.text || option}
+                    <MathText>{option.text || option}</MathText>
                   </span>
                   {answers[currentIndex] === idx && (
                     <FaCheck className="text-purple-400" />

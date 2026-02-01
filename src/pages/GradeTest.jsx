@@ -11,6 +11,7 @@ import toast from 'react-hot-toast'
 import { 
   GRADE_CONFIG, SUBJECTS, getSourceGrade, isBorrowedGrade 
 } from '../utils/gradeConfig'
+import MathText from '../components/MathText'
 
 const GradeTest = () => {
   const { gradeNum, subjectId, testId } = useParams()
@@ -255,7 +256,7 @@ const GradeTest = () => {
                 Câu {currentIndex + 1}
               </span>
               <h2 className="text-2xl font-bold text-white leading-relaxed">
-                {currentQuestion?.question}
+                <MathText>{currentQuestion?.question}</MathText>
               </h2>
             </div>
 
@@ -283,7 +284,7 @@ const GradeTest = () => {
                                       : 'bg-white/10'}`}>
                       {option.id}
                     </span>
-                    <span className="flex-1 text-lg">{option.text}</span>
+                    <span className="flex-1 text-lg"><MathText>{option.text}</MathText></span>
                     {isSelected && (
                       <motion.span
                         initial={{ scale: 0 }}
