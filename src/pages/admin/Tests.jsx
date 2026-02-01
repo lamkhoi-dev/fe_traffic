@@ -16,6 +16,8 @@ const AdminTests = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editingTest, setEditingTest] = useState(null)
+  const [customType, setCustomType] = useState('')
+  const [showCustomType, setShowCustomType] = useState(false)
   const [formData, setFormData] = useState({
     type: 'iq',
     name: '',
@@ -26,6 +28,9 @@ const AdminTests = () => {
     isActive: true
   })
   const navigate = useNavigate()
+
+  // Get unique test types from existing tests
+  const existingTypes = [...new Set(tests.map(t => t.type))].filter(t => t && !['iq', 'eq'].includes(t))
 
   useEffect(() => {
     const token = localStorage.getItem('adminToken')
@@ -117,9 +122,35 @@ const AdminTests = () => {
   }
 
   const getTypeColor = (type) => {
-    return type === 'iq' 
-      ? 'bg-gradient-to-br from-purple-500 to-blue-500' 
-      : 'bg-gradient-to-br from-pink-500 to-orange-500'
+    const colors = {
+      'iq': 'bg-gradient-to-br from-purple-500 to-blue-500',
+      'eq': 'bg-gradient-to-br from-pink-500 to-orange-500',
+      'toan': 'bg-gradient-to-br from-blue-500 to-cyan-500',
+      'ly': 'bg-gradient-to-br from-yellow-500 to-orange-500',
+      'hoa': 'bg-gradient-to-br from-green-500 to-emerald-500',
+      'sinh': 'bg-gradient-to-br from-teal-500 to-green-500',
+      'anh': 'bg-gradient-to-br from-red-500 to-pink-500',
+      'su': 'bg-gradient-to-br from-amber-500 to-yellow-500',
+      'dia': 'bg-gradient-to-br from-indigo-500 to-purple-500',
+      'van': 'bg-gradient-to-br from-rose-500 to-red-500',
+    }
+    return colors[type.toLowerCase()] || 'bg-gradient-to-br from-slate-500 to-slate-600'
+  }
+
+  const getTypeLabel = (type) => {
+    const labels = {
+      'iq': 'IQ Test',
+      'eq': 'EQ Test',
+      'toan': 'Toán học',
+      'ly': 'Vật lý',
+      'hoa': 'Hóa học',
+      'sinh': 'Sinh học',
+      'anh': 'Tiếng Anh',
+      'su': 'Lịch sử',
+      'dia': 'Địa lý',
+      'van': 'Ngữ văn',
+    }
+    return labels[type.toLowerCase()] || type.toUpperCase()
   }
 
   const menuItems = [
@@ -193,6 +224,8 @@ const AdminTests = () => {
             onClick={() => {
               setEditingTest(null)
               setFormData({ type: 'iq', name: '', description: '', duration: 15, questionCount: 20, difficulty: 'medium', isActive: true })
+              setCustomType('')
+              setShowCustomType(false)
               setShowModal(true)
             }}
             className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl text-white font-medium hover:shadow-lg hover:shadow-purple-500/30 transition-all"
@@ -246,7 +279,7 @@ const AdminTests = () => {
                         <div>
                           <div className="flex items-center gap-2 mb-1">
                             <span className="text-xs font-bold uppercase tracking-wider text-white/40">
-                              {test.type === 'iq' ? 'IQ Test' : 'EQ Test'}
+                              {getTypeLabel(test.type)}
                             </span>
                             {!test.isActive && (
                               <span className="px-2 py-0.5 rounded-full text-xs bg-red-500/20 text-red-400">Ẩn</span>
@@ -344,9 +377,11 @@ const AdminTests = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-white/80 text-sm mb-2">Loại test *</label>
-                  <div className="flex gap-4">
-                    <label className={`flex-1 flex items-center justify-center gap-2 p-4 rounded-xl cursor-pointer border-2 transition-all ${
-                      formData.type === 'iq' 
+                  
+                  {/* Default types: IQ and EQ */}
+                  <div className="flex gap-4 mb-3">
+                    <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-xl cursor-pointer border-2 transition-all ${
+                      formData.type === 'iq' && !showCustomType
                         ? 'border-purple-500 bg-purple-500/20' 
                         : 'border-white/10 hover:border-white/30'
                     }`}>
@@ -354,15 +389,15 @@ const AdminTests = () => {
                         type="radio"
                         name="type"
                         value="iq"
-                        checked={formData.type === 'iq'}
-                        onChange={e => setFormData({ ...formData, type: e.target.value })}
+                        checked={formData.type === 'iq' && !showCustomType}
+                        onChange={e => { setFormData({ ...formData, type: e.target.value }); setShowCustomType(false); }}
                         className="sr-only"
                       />
-                      <span className="text-2xl">🧠</span>
-                      <span className="text-white font-medium">IQ Test</span>
+                      <span className="text-xl">🧠</span>
+                      <span className="text-white font-medium text-sm">IQ</span>
                     </label>
-                    <label className={`flex-1 flex items-center justify-center gap-2 p-4 rounded-xl cursor-pointer border-2 transition-all ${
-                      formData.type === 'eq' 
+                    <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-xl cursor-pointer border-2 transition-all ${
+                      formData.type === 'eq' && !showCustomType
                         ? 'border-pink-500 bg-pink-500/20' 
                         : 'border-white/10 hover:border-white/30'
                     }`}>
@@ -370,13 +405,70 @@ const AdminTests = () => {
                         type="radio"
                         name="type"
                         value="eq"
-                        checked={formData.type === 'eq'}
-                        onChange={e => setFormData({ ...formData, type: e.target.value })}
+                        checked={formData.type === 'eq' && !showCustomType}
+                        onChange={e => { setFormData({ ...formData, type: e.target.value }); setShowCustomType(false); }}
                         className="sr-only"
                       />
-                      <span className="text-2xl">❤️</span>
-                      <span className="text-white font-medium">EQ Test</span>
+                      <span className="text-xl">❤️</span>
+                      <span className="text-white font-medium text-sm">EQ</span>
                     </label>
+                  </div>
+
+                  {/* Existing custom types */}
+                  {existingTypes.length > 0 && (
+                    <div className="mb-3">
+                      <p className="text-white/50 text-xs mb-2">Loại đã có:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {existingTypes.map(type => (
+                          <button
+                            key={type}
+                            type="button"
+                            onClick={() => { setFormData({ ...formData, type }); setShowCustomType(false); }}
+                            className={`px-3 py-1.5 rounded-lg text-sm transition-all ${
+                              formData.type === type && !showCustomType
+                                ? 'bg-emerald-500/30 border-2 border-emerald-500 text-white'
+                                : 'bg-white/10 hover:bg-white/20 text-white/70 border-2 border-transparent'
+                            }`}
+                          >
+                            {getTypeLabel(type)}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Add custom type */}
+                  <div className="border-t border-white/10 pt-3">
+                    <button
+                      type="button"
+                      onClick={() => setShowCustomType(!showCustomType)}
+                      className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl transition-all text-sm ${
+                        showCustomType
+                          ? 'bg-cyan-500/20 border-2 border-cyan-500 text-cyan-400'
+                          : 'bg-white/5 border-2 border-dashed border-white/20 text-white/60 hover:border-white/40 hover:text-white/80'
+                      }`}
+                    >
+                      <span>➕</span>
+                      <span>Thêm loại mới</span>
+                    </button>
+                    
+                    {showCustomType && (
+                      <div className="mt-3">
+                        <input
+                          type="text"
+                          value={customType}
+                          onChange={e => {
+                            setCustomType(e.target.value)
+                            setFormData({ ...formData, type: e.target.value.toLowerCase().trim() })
+                          }}
+                          placeholder="VD: toan, ly, hoa, anh, gdcd..."
+                          className="w-full px-4 py-3 bg-white/5 border border-cyan-500/50 rounded-xl text-white focus:outline-none focus:border-cyan-500 placeholder:text-white/30"
+                        />
+                        <p className="text-white/40 text-xs mt-2">
+                          💡 Nhập tên loại test mới (không dấu, viết thường). VD: "toan", "kinhdoanh", "luatgiaothong"
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
 
