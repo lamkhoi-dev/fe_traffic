@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FaBrain, FaHeart, FaArrowRight, FaChartLine, FaClock, FaUsers, FaStar } from 'react-icons/fa'
+import { FaBrain, FaHeart, FaArrowRight, FaChartLine, FaClock, FaUsers, FaStar, FaGraduationCap, FaBook } from 'react-icons/fa'
 
 const Home = () => {
   const features = [
@@ -349,6 +349,125 @@ const Home = () => {
               </div>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* School Tests Section - NEW */}
+      <section className="py-20 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold font-display mb-4">
+              <span className="text-white">Ôn tập theo </span>
+              <span className="gradient-text">Lớp học</span>
+            </h2>
+            <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+              Hệ thống bài kiểm tra từ lớp 1 đến lớp 12 với đầy đủ các môn: Toán, Lý, Tiếng Anh, Lịch sử
+            </p>
+          </motion.div>
+
+          {/* Grade levels overview */}
+          <div className="grid md:grid-cols-3 gap-6 mb-10">
+            {/* Primary */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="glass-card p-6 text-center"
+            >
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center">
+                <span className="text-3xl">🎒</span>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">Tiểu học</h3>
+              <p className="text-slate-400 text-sm mb-3">Lớp 1 - 5</p>
+              <span className="px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full text-xs">
+                Đang phát triển
+              </span>
+            </motion.div>
+
+            {/* Middle School */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="glass-card p-6 text-center"
+            >
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center">
+                <span className="text-3xl">📚</span>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">THCS</h3>
+              <p className="text-slate-400 text-sm mb-3">Lớp 6 - 9</p>
+              <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-xs">
+                Lớp 7-9 sẵn sàng
+              </span>
+            </motion.div>
+
+            {/* High School */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="glass-card p-6 text-center"
+            >
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center">
+                <span className="text-3xl">🎓</span>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">THPT</h3>
+              <p className="text-slate-400 text-sm mb-3">Lớp 10 - 12</p>
+              <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-xs">
+                Đầy đủ nội dung
+              </span>
+            </motion.div>
+          </div>
+
+          {/* Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10"
+          >
+            {[
+              { label: 'Tổng số lớp', value: '12', icon: '🏫' },
+              { label: 'Môn học', value: '4', icon: '📖' },
+              { label: 'Bài test', value: '240+', icon: '📝' },
+              { label: 'Câu hỏi', value: '4800+', icon: '❓' },
+            ].map((stat, i) => (
+              <div key={i} className="glass-card p-4 text-center">
+                <div className="text-2xl mb-2">{stat.icon}</div>
+                <div className="text-2xl font-bold text-white">{stat.value}</div>
+                <div className="text-sm text-slate-400">{stat.label}</div>
+              </div>
+            ))}
+          </motion.div>
+
+          {/* CTA Button */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <Link to="/grades">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-10 py-5 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl 
+                           font-semibold text-white text-lg flex items-center justify-center space-x-3
+                           shadow-2xl shadow-green-500/30 hover:shadow-green-500/50 transition-shadow mx-auto"
+              >
+                <FaGraduationCap className="text-2xl" />
+                <span>Chọn lớp học</span>
+                <FaArrowRight />
+              </motion.button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 

@@ -5,6 +5,10 @@ import TestList from './pages/TestList'
 import Test from './pages/Test'
 import TaskPage from './pages/TaskPage'
 import Result from './pages/Result'
+import GradeSelection from './pages/GradeSelection'
+import SubjectSelection from './pages/SubjectSelection'
+import GradeTestList from './pages/GradeTestList'
+import GradeTest from './pages/GradeTest'
 import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminSites from './pages/admin/Sites'
@@ -54,6 +58,11 @@ function App() {
             <Route path="test/:type/:id" element={<Test />} />
             <Route path="task/:sessionId" element={<TaskPage />} />
             <Route path="result/:sessionId" element={<Result />} />
+            {/* Grade-based routes */}
+            <Route path="grades" element={<GradeSelection />} />
+            <Route path="grade/:gradeNum" element={<SubjectSelection />} />
+            <Route path="grade/:gradeNum/subject/:subjectId" element={<GradeTestList />} />
+            <Route path="grade/:gradeNum/subject/:subjectId/test/:testId" element={<GradeTest />} />
           </Route>
           <Route path="/test-widget" element={<TestWidgetPage />} />
           <Route path="/admin" element={<AdminLogin />} />
