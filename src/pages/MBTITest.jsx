@@ -42,7 +42,7 @@ const MBTITest = () => {
 
   // Timer
   useEffect(() => {
-    if (loading || showResult) return
+    if (loading) return
     
     const timer = setInterval(() => {
       setTimeLeft(prev => {
@@ -56,7 +56,7 @@ const MBTITest = () => {
     }, 1000)
     
     return () => clearInterval(timer)
-  }, [loading, showResult])
+  }, [loading])
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60)
