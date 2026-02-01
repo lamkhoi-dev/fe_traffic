@@ -3,7 +3,9 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaClock, FaCheck, FaTimes, FaArrowRight, FaArrowLeft, FaTrophy, FaRedo, FaHome, FaList } from 'react-icons/fa'
 import { HiAcademicCap, HiSparkles, HiLightningBolt } from 'react-icons/hi'
-import API_BASE_URL from '../services/api'
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 
+  (window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://betraffic-production.up.railway.app')
 
 const AssessmentTest = () => {
   const { assessmentId } = useParams()
