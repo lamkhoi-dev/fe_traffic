@@ -21,6 +21,7 @@ const Layout = () => {
   }, [])
 
   const otherTestCategories = [
+    { id: 'mbti', label: 'Trắc nghiệm MBTI', icon: '🧠', special: true, path: '/mbti' },
     { id: 'toan', label: 'Toán học', icon: '📐' },
     { id: 'ly', label: 'Vật lý', icon: '⚡' },
     { id: 'hoa', label: 'Hóa học', icon: '🧪' },
@@ -132,13 +133,16 @@ const Layout = () => {
                           {otherTestCategories.map(cat => (
                             <Link
                               key={cat.id}
-                              to={`/categories/${cat.id}`}
+                              to={cat.path || `/categories/${cat.id}`}
                               onClick={() => setShowDropdown(false)}
-                              className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-white/80 
-                                         hover:bg-white/10 hover:text-white transition-all"
+                              className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-white/80 
+                                         hover:bg-white/10 hover:text-white transition-all ${
+                                           cat.special ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 mb-1' : ''
+                                         }`}
                             >
                               <span>{cat.icon}</span>
                               <span>{cat.label}</span>
+                              {cat.special && <span className="ml-auto text-xs bg-purple-500 text-white px-2 py-0.5 rounded-full">HOT</span>}
                             </Link>
                           ))}
                         </div>

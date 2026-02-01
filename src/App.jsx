@@ -12,6 +12,7 @@ import GradeTest from './pages/GradeTest'
 import AssessmentList from './pages/AssessmentList'
 import AssessmentTest from './pages/AssessmentTest'
 import TestCategories from './pages/TestCategories'
+import MBTITest from './pages/MBTITest'
 import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminSites from './pages/admin/Sites'
@@ -72,6 +73,8 @@ function App() {
             {/* Category routes */}
             <Route path="categories" element={<TestCategories />} />
             <Route path="categories/:type" element={<TestCategories />} />
+            {/* MBTI route */}
+            <Route path="mbti" element={<MBTITest />} />
           </Route>
           <Route path="/test-widget" element={<TestWidgetPage />} />
           <Route path="/admin" element={<AdminLogin />} />
