@@ -63,8 +63,15 @@ const TaskPage = () => {
       if (response.data.success) {
         setVerified(true)
         toast.success('Xác nhận thành công!')
+        
+        // Redirect based on test type
+        const testType = response.data.testType
         setTimeout(() => {
-          navigate(`/result/${sessionId}`)
+          if (testType === 'mbti') {
+            navigate(`/mbti/result/${sessionId}`)
+          } else {
+            navigate(`/result/${sessionId}`)
+          }
         }, 1500)
       } else {
         toast.error(response.data.message || 'Mã không chính xác!')
