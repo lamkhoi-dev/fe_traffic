@@ -353,10 +353,10 @@ const AssessmentTest = () => {
                       ? 'bg-purple-500 text-white'
                       : 'bg-white/10 text-slate-400'
                     }`}>
-                    {String.fromCharCode(65 + idx)}
+                    {option.id || String.fromCharCode(65 + idx)}
                   </span>
                   <span className={`flex-1 ${answers[currentIndex] === idx ? 'text-white' : 'text-slate-300'}`}>
-                    {option}
+                    {option.text || option}
                   </span>
                   {answers[currentIndex] === idx && (
                     <FaCheck className="text-purple-400" />
