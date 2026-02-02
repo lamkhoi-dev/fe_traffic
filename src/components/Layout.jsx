@@ -10,6 +10,16 @@ const Layout = () => {
   const [showDropdown, setShowDropdown] = useState(false)
   const dropdownRef = useRef(null)
   const [testCategories, setTestCategories] = useState([])
+  const [scrolled, setScrolled] = useState(false)
+
+  // Track scroll for header background
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   // Fetch test categories from API
   useEffect(() => {
@@ -65,7 +75,11 @@ const Layout = () => {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="fixed top-0 left-0 right-0 z-50"
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled 
+            ? 'bg-slate-900/90 backdrop-blur-xl shadow-lg shadow-black/20 border-b border-white/5' 
+            : 'bg-transparent'
+        }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
