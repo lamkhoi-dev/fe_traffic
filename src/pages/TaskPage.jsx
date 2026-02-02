@@ -171,9 +171,9 @@ const TaskPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="glass-card p-6 md:p-8 mb-6 relative md:static left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0 w-screen md:w-full md:rounded-2xl rounded-none"
+          className="glass-card p-8 mb-6"
         >
-          <div className="flex items-start space-x-4 mb-6 px-2 md:px-0">
+          <div className="flex items-start space-x-4 mb-6">
             <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-pink-600 rounded-xl 
                             flex items-center justify-center flex-shrink-0">
               <FaGlobe className="text-xl text-white" />
@@ -185,7 +185,7 @@ const TaskPage = () => {
           </div>
 
           {/* Steps */}
-          <div className="space-y-3 mb-6">
+          <div className="space-y-3 mb-6 relative md:static left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0 w-screen md:w-full px-4 md:px-0">
             <div className="flex items-start space-x-3 p-3 bg-white/5 md:rounded-xl">
               <span className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center 
                               text-blue-400 font-bold flex-shrink-0">
