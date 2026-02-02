@@ -16,6 +16,8 @@ import MBTITest from './pages/MBTITest'
 import MBTIResult from './pages/MBTIResult'
 import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
+import BlogList from './pages/BlogList'
+import BlogPost from './pages/BlogPost'
 import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminSites from './pages/admin/Sites'
@@ -24,6 +26,7 @@ import AdminQuestions from './pages/admin/Questions'
 import AdminTasks from './pages/admin/Tasks'
 import AdminStats from './pages/admin/Stats'
 import AdminSettings from './pages/admin/Settings'
+import AdminPosts from './pages/admin/Posts'
 import TestWidgetPage from './pages/TestWidgetPage'
 import Layout from './components/Layout'
 import Particles from './components/Particles'
@@ -83,6 +86,9 @@ function App() {
             {/* Legal pages */}
             <Route path="terms" element={<Terms />} />
             <Route path="privacy" element={<Privacy />} />
+            {/* Blog */}
+            <Route path="blog" element={<BlogList />} />
+            <Route path="blog/:slug" element={<BlogPost />} />
           </Route>
           <Route path="/test-widget" element={<TestWidgetPage />} />
           <Route path="/admin" element={<AdminLogin />} />
@@ -93,6 +99,7 @@ function App() {
           <Route path="/admin/tasks" element={<AdminTasks />} />
           <Route path="/admin/stats" element={<AdminStats />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
+          <Route path="/admin/posts" element={<AdminPosts />} />
         </Routes>
       </div>
     </Router>

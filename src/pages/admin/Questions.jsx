@@ -227,6 +227,7 @@ const AdminQuestions = () => {
     { label: 'Quản lý Questions', icon: FiList, path: '/admin/questions', active: true },
     { label: 'Quản lý Tasks', icon: FiBarChart2, path: '/admin/tasks' },
     { label: 'Thống kê', icon: FiTrendingUp, path: '/admin/stats' },
+    { label: 'Bài viết', icon: FiEdit2, path: '/admin/posts' },
     { label: 'Cài đặt', icon: FiSettings, path: '/admin/settings' },
   ]
 

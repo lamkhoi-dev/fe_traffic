@@ -246,6 +246,7 @@ const Layout = () => {
               </span>
             </div>
             <div className="flex items-center space-x-6 text-sm text-slate-400">
+              <Link to="/blog" className="hover:text-white transition-colors">Blog</Link>
               <Link to="/terms" className="hover:text-white transition-colors">Điều khoản</Link>
               <Link to="/privacy" className="hover:text-white transition-colors">Bảo mật</Link>
               <a href="mailto:support@iqeqtest.com" className="hover:text-white transition-colors">Liên hệ</a>
