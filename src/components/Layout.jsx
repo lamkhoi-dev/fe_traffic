@@ -102,7 +102,7 @@ const Layout = () => {
             <div className="flex items-center space-x-2 sm:space-x-3">
               <Link
                 to="/"
-                className={`px-3 sm:px-4 py-2 rounded-lg flex items-center space-x-2 transition-all duration-300 border
+                className={`h-10 px-3 sm:px-4 rounded-lg flex items-center space-x-2 transition-all duration-300 border
                            ${isHome 
                              ? 'bg-white/10 text-white border-white/20' 
                              : 'text-slate-400 hover:text-white hover:bg-white/5 border-white/10 hover:border-white/20'}`}
@@ -112,7 +112,7 @@ const Layout = () => {
               </Link>
               <Link
                 to="/tests/iq"
-                className="px-3 sm:px-4 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 
+                className="h-10 px-3 sm:px-4 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 
                            transition-all duration-300 flex items-center space-x-2 border border-white/10 hover:border-white/20"
               >
                 <span>🧠</span>
@@ -120,7 +120,7 @@ const Layout = () => {
               </Link>
               <Link
                 to="/tests/eq"
-                className="px-3 sm:px-4 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 
+                className="h-10 px-3 sm:px-4 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 
                            transition-all duration-300 flex items-center space-x-2 border border-white/10 hover:border-white/20"
               >
                 <span>💖</span>
@@ -131,7 +131,7 @@ const Layout = () => {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setShowDropdown(!showDropdown)}
-                  className={`px-3 sm:px-4 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 
+                  className={`h-10 px-3 sm:px-4 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 
                              transition-all duration-300 flex items-center space-x-2 border ${
                                showDropdown ? 'bg-white/10 text-white border-white/20' : 'border-white/10 hover:border-white/20'
                              }`}
