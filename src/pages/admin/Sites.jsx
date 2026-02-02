@@ -192,42 +192,57 @@ const AdminSites = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex">
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-20 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <motion.aside
         initial={{ x: -300 }}
         animate={{ x: sidebarOpen ? 0 : -300 }}
-        className={`fixed lg:relative z-30 w-64 h-full bg-slate-800/50 backdrop-blur-xl border-r border-white/10 flex flex-col`}
+        className={`fixed lg:relative z-30 w-64 h-full bg-slate-800/95 lg:bg-slate-800/50 backdrop-blur-xl border-r border-white/10 flex flex-col`}
       >
-        <div className="p-6 border-b border-white/10">
-          <h1 className="text-xl font-bold text-white flex items-center gap-2">
-            <span className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+        <div className="p-4 md:p-6 border-b border-white/10 flex items-center justify-between">
+          <h1 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
+            <span className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-sm">
               🧠
             </span>
-            IQ Admin
+            <span className="hidden sm:inline">IQ Admin</span>
           </h1>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="lg:hidden p-2 text-white/60 hover:text-white"
+          >
+            <FiX size={20} />
+          </button>
         </div>
         
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className="flex-1 p-3 md:p-4 space-y-1 md:space-y-2 overflow-y-auto">
           {menuItems.map((item, idx) => (
             <Link
               key={idx}
               to={item.path}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+              onClick={() => setSidebarOpen(false)}
+              className={`flex items-center gap-3 px-3 md:px-4 py-2.5 md:py-3 rounded-xl transition-all text-sm md:text-base ${
                 item.active 
                   ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white border border-purple-500/30' 
                   : 'text-white/60 hover:bg-white/5 hover:text-white'
               }`}
             >
-              <item.icon className="w-5 h-5" />
-              {item.label}
+              <item.icon className="w-5 h-5 flex-shrink-0" />
+              <span className="truncate">{item.label}</span>
             </Link>
           ))}
         </nav>
 
-        <div className="p-4 border-t border-white/10">
+        <div className="p-3 md:p-4 border-t border-white/10">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-all"
+            className="w-full flex items-center gap-3 px-3 md:px-4 py-2.5 md:py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-all text-sm md:text-base"
           >
             <FiLogOut className="w-5 h-5" />
             Đăng xuất
@@ -236,17 +251,17 @@ const AdminSites = () => {
       </motion.aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col min-h-screen w-full">
         {/* Header */}
-        <header className="bg-slate-800/30 backdrop-blur-sm border-b border-white/10 px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
+        <header className="bg-slate-800/30 backdrop-blur-sm border-b border-white/10 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-3 min-w-0">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="lg:hidden p-2 text-white/60 hover:text-white"
+              className="lg:hidden p-2 text-white/60 hover:text-white flex-shrink-0"
             >
               <FiMenu size={24} />
             </button>
-            <h2 className="text-xl font-semibold text-white">Quản lý Sites</h2>
+            <h2 className="text-base md:text-xl font-semibold text-white truncate">Quản lý Sites</h2>
           </div>
           <button
             onClick={() => {
@@ -254,15 +269,15 @@ const AdminSites = () => {
               setFormData({ name: '', domain: '', url: '', searchKeyword: '', instruction: '', isActive: true, quota: 0, priority: 1 })
               setShowModal(true)
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl text-white font-medium hover:shadow-lg hover:shadow-purple-500/30 transition-all"
+            className="flex items-center gap-2 px-3 md:px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl text-white font-medium hover:shadow-lg hover:shadow-purple-500/30 transition-all text-sm md:text-base flex-shrink-0"
           >
             <FiPlus />
-            Thêm Site
+            <span className="hidden sm:inline">Thêm Site</span>
           </button>
         </header>
 
         {/* Content */}
-        <main className="flex-1 p-6 overflow-auto">
+        <main className="flex-1 p-4 md:p-6 overflow-auto">
           {loading ? (
             <div className="flex items-center justify-center h-64">
               <div className="animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent"></div>
@@ -280,120 +295,120 @@ const AdminSites = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.1 }}
-                    className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all"
+                    className="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 border border-white/10 hover:border-white/20 transition-all"
                   >
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                          <FiGlobe className="w-6 h-6 text-white" />
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+                      <div className="flex items-center gap-3 md:gap-4">
+                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
+                          <FiGlobe className="w-5 h-5 md:w-6 md:h-6 text-white" />
                         </div>
-                        <div>
-                          <h3 className="text-lg font-semibold text-white">{site.name}</h3>
-                          <p className="text-white/60 text-sm">{site.domain}</p>
+                        <div className="min-w-0">
+                          <h3 className="text-base md:text-lg font-semibold text-white truncate">{site.name}</h3>
+                          <p className="text-white/60 text-xs md:text-sm truncate">{site.domain}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      <div className="flex items-center gap-2 self-start">
+                        <span className={`px-2 md:px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
                           site.isActive ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
                         }`}>
-                          {site.isActive ? 'Đang hoạt động' : 'Đã tắt'}
+                          {site.isActive ? 'Hoạt động' : 'Đã tắt'}
                         </span>
                       </div>
                     </div>
 
                     {/* Quota & Priority Stats */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 p-4 bg-white/5 rounded-xl">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-4 p-3 md:p-4 bg-white/5 rounded-xl">
                       <div className="text-center">
                         <div className="flex items-center justify-center gap-1 text-yellow-400 mb-1">
-                          <FiTarget className="w-4 h-4" />
-                          <span className="text-xs">Quota</span>
+                          <FiTarget className="w-3 h-3 md:w-4 md:h-4" />
+                          <span className="text-[10px] md:text-xs">Quota</span>
                         </div>
-                        <p className="text-white font-bold">
-                          {site.quota === 0 ? '∞' : site.remainingQuota + ' / ' + site.quota}
+                        <p className="text-white font-bold text-sm md:text-base">
+                          {site.quota === 0 ? '∞' : site.remainingQuota + '/' + site.quota}
                         </p>
-                        <p className="text-white/40 text-xs">
+                        <p className="text-white/40 text-[10px] md:text-xs">
                           {site.quota === 0 ? 'Unlimited' : `Còn ${site.remainingQuota}`}
                         </p>
                       </div>
                       <div className="text-center">
                         <div className="flex items-center justify-center gap-1 text-blue-400 mb-1">
-                          <FiPieChart className="w-4 h-4" />
-                          <span className="text-xs">Priority</span>
+                          <FiPieChart className="w-3 h-3 md:w-4 md:h-4" />
+                          <span className="text-[10px] md:text-xs">Priority</span>
                         </div>
-                        <p className="text-white font-bold">{site.priority || 1}</p>
-                        <p className="text-white/40 text-xs">
+                        <p className="text-white font-bold text-sm md:text-base">{site.priority || 1}</p>
+                        <p className="text-white/40 text-[10px] md:text-xs">
                           ~{totalPriority > 0 ? Math.round(((site.priority || 1) / totalPriority) * 100) : 0}% traffic
                         </p>
                       </div>
                       <div className="text-center">
                         <div className="flex items-center justify-center gap-1 text-green-400 mb-1">
-                          <FiCheck className="w-4 h-4" />
-                          <span className="text-xs">Hoàn thành</span>
+                          <FiCheck className="w-3 h-3 md:w-4 md:h-4" />
+                          <span className="text-[10px] md:text-xs">Hoàn thành</span>
                         </div>
-                        <p className="text-white font-bold">{site.totalCompleted || 0}</p>
+                        <p className="text-white font-bold text-sm md:text-base">{site.totalCompleted || 0}</p>
                       </div>
                       <div className="text-center">
                         <div className="flex items-center justify-center gap-1 text-purple-400 mb-1">
-                          <FiTrendingUp className="w-4 h-4" />
-                          <span className="text-xs">Visits</span>
+                          <FiTrendingUp className="w-3 h-3 md:w-4 md:h-4" />
+                          <span className="text-[10px] md:text-xs">Visits</span>
                         </div>
-                        <p className="text-white font-bold">{site.totalVisits || 0}</p>
+                        <p className="text-white font-bold text-sm md:text-base">{site.totalVisits || 0}</p>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div className="grid grid-cols-1 gap-3 md:gap-4 mb-4">
                       <div>
-                        <p className="text-white/40 text-sm mb-1">URL</p>
-                        <a href={site.url} target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 flex items-center gap-1 text-sm">
-                          {site.url} <FiExternalLink className="w-4 h-4" />
+                        <p className="text-white/40 text-xs md:text-sm mb-1">URL</p>
+                        <a href={site.url} target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 flex items-center gap-1 text-xs md:text-sm break-all">
+                          {site.url} <FiExternalLink className="w-3 h-3 md:w-4 md:h-4 flex-shrink-0" />
                         </a>
                       </div>
                       <div>
-                        <p className="text-white/40 text-sm mb-1">Site Key</p>
+                        <p className="text-white/40 text-xs md:text-sm mb-1">Site Key</p>
                         <div className="flex items-center gap-2">
-                          <code className="text-white/80 bg-white/10 px-2 py-1 rounded text-sm">{site.siteKey}</code>
-                          <button onClick={() => copyToClipboard(site.siteKey)} className="text-white/40 hover:text-white">
+                          <code className="text-white/80 bg-white/10 px-2 py-1 rounded text-xs md:text-sm truncate">{site.siteKey}</code>
+                          <button onClick={() => copyToClipboard(site.siteKey)} className="text-white/40 hover:text-white flex-shrink-0">
                             <FiCopy className="w-4 h-4" />
                           </button>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-white/10">
+                    <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 md:gap-3 pt-4 border-t border-white/10">
                       <button
                         onClick={() => setShowCodeModal(site)}
-                        className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-all text-sm"
+                        className="flex items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg md:rounded-xl text-white transition-all text-xs md:text-sm"
                       >
-                        <FiCode className="w-4 h-4" />
-                        Widget
+                        <FiCode className="w-3 h-3 md:w-4 md:h-4" />
+                        <span>Widget</span>
                       </button>
                       <button
                         onClick={() => handleEditTaskSteps(site)}
-                        className="flex items-center gap-2 px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 rounded-xl text-purple-400 transition-all text-sm"
+                        className="flex items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 rounded-lg md:rounded-xl text-purple-400 transition-all text-xs md:text-sm"
                       >
-                        <FiList className="w-4 h-4" />
-                        Tuỳ chỉnh bước
+                        <FiList className="w-3 h-3 md:w-4 md:h-4" />
+                        <span>Bước</span>
                       </button>
                       <button
                         onClick={() => handleResetQuota(site)}
-                        className="flex items-center gap-2 px-4 py-2 bg-yellow-500/20 hover:bg-yellow-500/30 rounded-xl text-yellow-400 transition-all text-sm"
+                        className="flex items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-2 bg-yellow-500/20 hover:bg-yellow-500/30 rounded-lg md:rounded-xl text-yellow-400 transition-all text-xs md:text-sm"
                       >
-                        <FiRefreshCw className="w-4 h-4" />
-                        Reset Quota
+                        <FiRefreshCw className="w-3 h-3 md:w-4 md:h-4" />
+                        <span>Reset</span>
                       </button>
                       <button
                         onClick={() => handleEdit(site)}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-xl text-blue-400 transition-all text-sm"
+                        className="flex items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-lg md:rounded-xl text-blue-400 transition-all text-xs md:text-sm"
                       >
-                        <FiEdit2 className="w-4 h-4" />
-                        Sửa
+                        <FiEdit2 className="w-3 h-3 md:w-4 md:h-4" />
+                        <span>Sửa</span>
                       </button>
                       <button
                         onClick={() => handleDelete(site._id)}
-                        className="flex items-center gap-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-xl text-red-400 transition-all text-sm"
+                        className="flex items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg md:rounded-xl text-red-400 transition-all text-xs md:text-sm col-span-2 sm:col-span-1"
                       >
-                        <FiTrash2 className="w-4 h-4" />
-                        Xóa
+                        <FiTrash2 className="w-3 h-3 md:w-4 md:h-4" />
+                        <span>Xóa</span>
                       </button>
                     </div>
                   </motion.div>
@@ -411,26 +426,26 @@ const AdminSites = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-2 md:p-4"
             onClick={() => setShowTaskStepsModal(null)}
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-800 rounded-2xl p-6 w-full max-w-2xl border border-white/10 max-h-[90vh] overflow-y-auto"
+              className="bg-slate-800 rounded-xl md:rounded-2xl p-4 md:p-6 w-full max-w-2xl border border-white/10 max-h-[95vh] overflow-y-auto"
               onClick={e => e.stopPropagation()}
             >
-              <h3 className="text-xl font-bold text-white mb-2">
-                Tuỳ chỉnh nội dung các bước nhiệm vụ
+              <h3 className="text-base md:text-xl font-bold text-white mb-1 md:mb-2">
+                Tuỳ chỉnh nội dung các bước
               </h3>
-              <p className="text-white/60 text-sm mb-6">Site: {showTaskStepsModal.name}</p>
+              <p className="text-white/60 text-xs md:text-sm mb-4 md:mb-6">Site: {showTaskStepsModal.name}</p>
               
-              <div className="space-y-6">
+              <div className="space-y-4 md:space-y-6">
                 {['step1', 'step2', 'step3', 'step4'].map((stepKey, index) => (
-                  <div key={stepKey} className="p-4 bg-white/5 rounded-xl border border-white/10">
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm ${
+                  <div key={stepKey} className="p-3 md:p-4 bg-white/5 rounded-lg md:rounded-xl border border-white/10">
+                    <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                      <span className={`min-w-[2rem] h-8 px-2 rounded-lg flex items-center justify-center font-bold text-xs md:text-sm ${
                         index === 0 ? 'bg-blue-500/20 text-blue-400' :
                         index === 1 ? 'bg-purple-500/20 text-purple-400' :
                         index === 2 ? 'bg-pink-500/20 text-pink-400' :
@@ -438,12 +453,12 @@ const AdminSites = () => {
                       }`}>
                         {taskStepsForm[stepKey].label}
                       </span>
-                      <h4 className="text-white font-medium">Bước {index + 1}</h4>
+                      <h4 className="text-white font-medium text-sm md:text-base">Bước {index + 1}</h4>
                     </div>
                     
-                    <div className="grid gap-3">
+                    <div className="grid gap-2 md:gap-3">
                       <div>
-                        <label className="block text-white/60 text-xs mb-1">Ký hiệu (1, 2, 3...)</label>
+                        <label className="block text-white/60 text-[10px] md:text-xs mb-1">Ký hiệu (1, 2, 3...)</label>
                         <input
                           type="text"
                           value={taskStepsForm[stepKey].label}
@@ -451,12 +466,12 @@ const AdminSites = () => {
                             ...taskStepsForm,
                             [stepKey]: { ...taskStepsForm[stepKey], label: e.target.value }
                           })}
-                          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-purple-500 text-sm"
+                          className="w-full px-2 md:px-3 py-1.5 md:py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-purple-500 text-xs md:text-sm"
                           placeholder="VD: 1, A, ★..."
                         />
                       </div>
                       <div>
-                        <label className="block text-white/60 text-xs mb-1">Tiêu đề</label>
+                        <label className="block text-white/60 text-[10px] md:text-xs mb-1">Tiêu đề</label>
                         <input
                           type="text"
                           value={taskStepsForm[stepKey].title}
@@ -464,11 +479,11 @@ const AdminSites = () => {
                             ...taskStepsForm,
                             [stepKey]: { ...taskStepsForm[stepKey], title: e.target.value }
                           })}
-                          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-purple-500 text-sm"
+                          className="w-full px-2 md:px-3 py-1.5 md:py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-purple-500 text-xs md:text-sm"
                         />
                       </div>
                       <div>
-                        <label className="block text-white/60 text-xs mb-1">Mô tả</label>
+                        <label className="block text-white/60 text-[10px] md:text-xs mb-1">Mô tả</label>
                         <textarea
                           value={taskStepsForm[stepKey].description}
                           onChange={e => setTaskStepsForm({
@@ -476,7 +491,7 @@ const AdminSites = () => {
                             [stepKey]: { ...taskStepsForm[stepKey], description: e.target.value }
                           })}
                           rows={2}
-                          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-purple-500 text-sm"
+                          className="w-full px-2 md:px-3 py-1.5 md:py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-purple-500 text-xs md:text-sm"
                         />
                       </div>
                     </div>
@@ -484,27 +499,27 @@ const AdminSites = () => {
                 ))}
               </div>
 
-              <div className="flex gap-3 pt-6">
+              <div className="flex flex-col sm:flex-row gap-2 md:gap-3 pt-4 md:pt-6">
                 <button
                   type="button"
                   onClick={() => setTaskStepsForm(defaultTaskSteps)}
-                  className="px-4 py-3 bg-yellow-500/20 hover:bg-yellow-500/30 rounded-xl text-yellow-400 transition-all"
+                  className="px-3 md:px-4 py-2 md:py-3 bg-yellow-500/20 hover:bg-yellow-500/30 rounded-lg md:rounded-xl text-yellow-400 transition-all text-xs md:text-sm"
                 >
                   Reset mặc định
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowTaskStepsModal(null)}
-                  className="flex-1 px-4 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-all"
+                  className="flex-1 px-3 md:px-4 py-2 md:py-3 bg-white/10 hover:bg-white/20 rounded-lg md:rounded-xl text-white transition-all text-xs md:text-sm"
                 >
                   Hủy
                 </button>
                 <button
                   type="button"
                   onClick={handleSaveTaskSteps}
-                  className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl text-white font-medium hover:shadow-lg hover:shadow-purple-500/30 transition-all"
+                  className="flex-1 px-3 md:px-4 py-2 md:py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg md:rounded-xl text-white font-medium hover:shadow-lg hover:shadow-purple-500/30 transition-all text-xs md:text-sm"
                 >
-                  Lưu thay đổi
+                  Lưu
                 </button>
               </div>
             </motion.div>

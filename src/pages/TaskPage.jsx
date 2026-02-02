@@ -187,8 +187,8 @@ const TaskPage = () => {
           {/* Steps */}
           <div className="space-y-3 mb-6 relative md:static left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0 w-screen md:w-full px-4 md:px-0">
             <div className="flex items-start space-x-3 p-3 bg-white/5 md:rounded-xl">
-              <span className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center 
-                              text-blue-400 font-bold flex-shrink-0">
+              <span className="min-w-[2rem] h-8 px-2 bg-blue-500/20 rounded-lg flex items-center justify-center 
+                              text-blue-400 font-bold flex-shrink-0 text-sm">
                 {task?.taskSteps?.step1?.label || '1'}
               </span>
               <div>
@@ -215,8 +215,8 @@ const TaskPage = () => {
 
             <div className="p-3 bg-white/5 md:rounded-xl">
               <div className="flex items-start space-x-3">
-                <span className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center 
-                                text-purple-400 font-bold flex-shrink-0">
+                <span className="min-w-[2rem] h-8 px-2 bg-purple-500/20 rounded-lg flex items-center justify-center 
+                                text-purple-400 font-bold flex-shrink-0 text-sm">
                   {task?.taskSteps?.step2?.label || '2'}
                 </span>
                 <div className="flex-1">
@@ -243,8 +243,8 @@ const TaskPage = () => {
 
             <div className="p-3 bg-white/5 md:rounded-xl">
               <div className="flex items-start space-x-3">
-                <span className="w-8 h-8 bg-pink-500/20 rounded-lg flex items-center justify-center 
-                                text-pink-400 font-bold flex-shrink-0">
+                <span className="min-w-[2rem] h-8 px-2 bg-pink-500/20 rounded-lg flex items-center justify-center 
+                                text-pink-400 font-bold flex-shrink-0 text-sm">
                   {task?.taskSteps?.step3?.label || '3'}
                 </span>
                 <div className="flex-1">
@@ -270,8 +270,8 @@ const TaskPage = () => {
             </div>
 
             <div className="flex items-start space-x-3 p-3 bg-white/5 md:rounded-xl">
-              <span className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center 
-                              text-green-400 font-bold flex-shrink-0">
+              <span className="min-w-[2rem] h-8 px-2 bg-green-500/20 rounded-lg flex items-center justify-center 
+                              text-green-400 font-bold flex-shrink-0 text-sm">
                 {task?.taskSteps?.step4?.label || '4'}
               </span>
               <div>
