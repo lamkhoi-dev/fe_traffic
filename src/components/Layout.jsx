@@ -99,41 +99,38 @@ const Layout = () => {
             </Link>
 
             {/* Nav Links */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-3">
               <Link
                 to="/"
-                className={`px-4 py-2 rounded-lg flex items-center space-x-2 transition-all duration-300
+                className={`px-3 sm:px-4 py-2 rounded-lg flex items-center space-x-2 transition-all duration-300 border
                            ${isHome 
-                             ? 'bg-white/10 text-white' 
-                             : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                             ? 'bg-white/10 text-white border-white/20' 
+                             : 'text-slate-400 hover:text-white hover:bg-white/5 border-white/10 hover:border-white/20'}`}
               >
                 <FaHome />
                 <span className="hidden sm:inline">Trang chủ</span>
               </Link>
               <Link
                 to="/tests/iq"
-                className="px-4 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 
-                           transition-all duration-300 flex items-center space-x-2"
+                className="px-3 sm:px-4 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 
+                           transition-all duration-300 flex items-center space-x-2 border border-white/10 hover:border-white/20"
               >
                 <span>🧠</span>
                 <span className="hidden sm:inline">IQ Test</span>
               </Link>
               <Link
                 to="/tests/eq"
-                className="px-4 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 
-                           transition-all duration-300 flex items-center space-x-2"
+                className="px-3 sm:px-4 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 
+                           transition-all duration-300 flex items-center space-x-2 border border-white/10 hover:border-white/20"
               >
-                <span>💖</span>
-                <span className="hidden sm:inline">EQ Test</span>
-              </Link>
               
               {/* Dropdown for other tests */}
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setShowDropdown(!showDropdown)}
-                  className={`px-4 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 
-                             transition-all duration-300 flex items-center space-x-2 ${
-                               showDropdown ? 'bg-white/10 text-white' : ''
+                  className={`px-3 sm:px-4 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 
+                             transition-all duration-300 flex items-center space-x-2 border ${
+                               showDropdown ? 'bg-white/10 text-white border-white/20' : 'border-white/10 hover:border-white/20'
                              }`}
                 >
                   <span>📋</span>

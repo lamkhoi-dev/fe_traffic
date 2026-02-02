@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { 
   FiBarChart2, FiPieChart, FiGlobe, FiFileText, 
-  FiLogOut, FiMenu, FiTrendingUp, FiUsers,
+  FiLogOut, FiMenu, FiX, FiTrendingUp, FiUsers,
   FiCalendar, FiClock, FiList
 } from 'react-icons/fi'
 import api from '../../services/api'
@@ -60,42 +60,57 @@ const AdminStats = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex">
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-20 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <motion.aside
         initial={{ x: -300 }}
         animate={{ x: sidebarOpen ? 0 : -300 }}
-        className={`fixed lg:relative z-30 w-64 h-full bg-slate-800/50 backdrop-blur-xl border-r border-white/10 flex flex-col`}
+        className={`fixed lg:relative z-30 w-64 h-full bg-slate-800/95 lg:bg-slate-800/50 backdrop-blur-xl border-r border-white/10 flex flex-col`}
       >
-        <div className="p-6 border-b border-white/10">
-          <h1 className="text-xl font-bold text-white flex items-center gap-2">
-            <span className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+        <div className="p-4 md:p-6 border-b border-white/10 flex items-center justify-between">
+          <h1 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
+            <span className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-sm">
               🧠
             </span>
-            IQ Admin
+            <span>IQ Admin</span>
           </h1>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="lg:hidden p-2 text-white/60 hover:text-white"
+          >
+            <FiX size={20} />
+          </button>
         </div>
         
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className="flex-1 p-3 md:p-4 space-y-1 md:space-y-2 overflow-y-auto">
           {menuItems.map((item, idx) => (
             <Link
               key={idx}
               to={item.path}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+              onClick={() => setSidebarOpen(false)}
+              className={`flex items-center gap-3 px-3 md:px-4 py-2.5 md:py-3 rounded-xl transition-all text-sm md:text-base ${
                 item.active 
                   ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white border border-purple-500/30' 
                   : 'text-white/60 hover:bg-white/5 hover:text-white'
               }`}
             >
-              <item.icon className="w-5 h-5" />
-              {item.label}
+              <item.icon className="w-5 h-5 flex-shrink-0" />
+              <span className="truncate">{item.label}</span>
             </Link>
           ))}
         </nav>
 
-        <div className="p-4 border-t border-white/10">
+        <div className="p-3 md:p-4 border-t border-white/10">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-all"
+            className="w-full flex items-center gap-3 px-3 md:px-4 py-2.5 md:py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-all text-sm md:text-base"
           >
             <FiLogOut className="w-5 h-5" />
             Đăng xuất
