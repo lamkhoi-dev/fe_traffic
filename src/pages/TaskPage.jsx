@@ -227,11 +227,11 @@ const TaskPage = () => {
                 </div>
               </div>
               {task?.step2Image && (
-                <div className="mt-3 relative group cursor-pointer" onClick={() => setZoomImage(task.step2Image)}>
+                <div className="mt-3 -mx-3 relative group cursor-pointer" onClick={() => setZoomImage(task.step2Image)}>
                   <img 
                     src={task.step2Image} 
                     alt="Hướng dẫn bước 2" 
-                    className="rounded-xl border-2 border-white/20 w-full h-auto shadow-lg shadow-black/30 transition-transform hover:scale-[1.02]"
+                    className="md:rounded-xl border-y-2 md:border-2 border-white/20 w-full h-auto shadow-lg shadow-black/30 transition-transform hover:scale-[1.02]"
                     onError={(e) => e.target.style.display = 'none'}
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded-xl flex items-center justify-center">
@@ -255,11 +255,11 @@ const TaskPage = () => {
                 </div>
               </div>
               {task?.step3Image && (
-                <div className="mt-3 relative group cursor-pointer" onClick={() => setZoomImage(task.step3Image)}>
+                <div className="mt-3 -mx-3 relative group cursor-pointer" onClick={() => setZoomImage(task.step3Image)}>
                   <img 
                     src={task.step3Image} 
                     alt="Hướng dẫn bước 3" 
-                    className="rounded-xl border-2 border-white/20 w-full h-auto shadow-lg shadow-black/30 transition-transform hover:scale-[1.02]"
+                    className="md:rounded-xl border-y-2 md:border-2 border-white/20 w-full h-auto shadow-lg shadow-black/30 transition-transform hover:scale-[1.02]"
                     onError={(e) => e.target.style.display = 'none'}
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded-xl flex items-center justify-center">
