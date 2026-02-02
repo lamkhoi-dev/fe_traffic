@@ -67,17 +67,8 @@ const Test = () => {
       setTimeLeft(testRes.data.test.duration * 60)
     } catch (error) {
       console.error('Error initializing test:', error)
-      // Demo data
-      const demoQuestions = generateDemoQuestions(type)
-      setTest({
-        _id: id,
-        name: isIQ ? 'IQ Test Demo' : 'EQ Test Demo',
-        duration: 15,
-        questionCount: 20
-      })
-      setQuestions(demoQuestions)
-      setTimeLeft(15 * 60)
-      setSessionId('demo-session-' + Date.now())
+      toast.error(error.response?.data?.message || 'Không thể tải bài test. Vui lòng thử lại!')
+      navigate(-1) // Go back
     } finally {
       setLoading(false)
     }
