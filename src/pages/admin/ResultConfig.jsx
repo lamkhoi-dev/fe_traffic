@@ -58,7 +58,7 @@ export default function ResultConfig() {
   const fetchSettings = async () => {
     try {
       setLoading(true)
-      const res = await api.get('/settings/result/config')
+      const res = await api.get('/api/settings/result/config')
       setSettings(res.data.settings)
     } catch (err) {
       setError('Không thể tải cấu hình')
@@ -71,7 +71,7 @@ export default function ResultConfig() {
     try {
       setSaving(true)
       setError('')
-      const res = await api.put('/settings/result/config', updates)
+      const res = await api.put('/api/settings/result/config', updates)
       setSettings(res.data.settings)
       setSuccess('Đã lưu thay đổi!')
       setTimeout(() => setSuccess(''), 3000)
@@ -87,7 +87,7 @@ export default function ResultConfig() {
     
     try {
       setSaving(true)
-      const res = await api.post('/settings/result/reset')
+      const res = await api.post('/api/settings/result/reset')
       setSettings(res.data.settings)
       setSuccess('Đã khôi phục cài đặt mặc định!')
       setTimeout(() => setSuccess(''), 3000)
@@ -125,11 +125,11 @@ export default function ResultConfig() {
     try {
       setSaving(true)
       if (isNew) {
-        const res = await api.post('/settings/result/score-level', level)
+        const res = await api.post('/api/settings/result/score-level', level)
         setSettings(res.data.settings)
         setShowAddLevel(false)
       } else {
-        const res = await api.put(`/settings/result/score-level/${level._id}`, level)
+        const res = await api.put(`/api/settings/result/score-level/${level._id}`, level)
         setSettings(res.data.settings)
         setEditingLevel(null)
       }
@@ -145,7 +145,7 @@ export default function ResultConfig() {
   const handleDeleteLevel = async (id) => {
     if (!confirm('Xóa mức điểm này?')) return
     try {
-      const res = await api.delete(`/settings/result/score-level/${id}`)
+      const res = await api.delete(`/api/settings/result/score-level/${id}`)
       setSettings(res.data.settings)
     } catch (err) {
       setError('Lỗi khi xóa')
@@ -157,11 +157,11 @@ export default function ResultConfig() {
     try {
       setSaving(true)
       if (isNew) {
-        const res = await api.post('/settings/result/advice-range', advice)
+        const res = await api.post('/api/settings/result/advice-range', advice)
         setSettings(res.data.settings)
         setShowAddAdvice(false)
       } else {
-        const res = await api.put(`/settings/result/advice-range/${advice._id}`, advice)
+        const res = await api.put(`/api/settings/result/advice-range/${advice._id}`, advice)
         setSettings(res.data.settings)
         setEditingAdvice(null)
       }
@@ -177,7 +177,7 @@ export default function ResultConfig() {
   const handleDeleteAdvice = async (id) => {
     if (!confirm('Xóa khoảng lời khuyên này?')) return
     try {
-      const res = await api.delete(`/settings/result/advice-range/${id}`)
+      const res = await api.delete(`/api/settings/result/advice-range/${id}`)
       setSettings(res.data.settings)
     } catch (err) {
       setError('Lỗi khi xóa')
