@@ -244,23 +244,6 @@ const TaskPage = () => {
               </div>
             </div>
           </div>
-
-          {/* Direct link (optional) */}
-          <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl mb-6">
-            <div className="flex items-center space-x-2 text-blue-400 text-sm mb-2">
-              <FaInfoCircle />
-              <span>Hoặc truy cập trực tiếp:</span>
-            </div>
-            <a
-              href={task?.siteUrl || '#'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center space-x-2 text-white hover:text-blue-400 transition-colors"
-            >
-              <FaExternalLinkAlt />
-              <span className="truncate">{task?.siteUrl || 'https://example.com'}</span>
-            </a>
-          </div>
         </motion.div>
 
         {/* Code Input */}
