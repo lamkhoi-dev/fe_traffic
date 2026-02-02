@@ -185,7 +185,7 @@ const TaskPage = () => {
           </div>
 
           {/* Steps */}
-          <div className="space-y-3 mb-6 relative md:static left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0 w-screen md:w-full px-4 md:px-0">
+          <div className="space-y-3 mb-6 relative md:static left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0 w-screen md:w-full md:px-0">
             <div className="flex items-start space-x-3 p-3 bg-white/5 md:rounded-xl">
               <span className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center 
                               text-blue-400 font-bold flex-shrink-0">
