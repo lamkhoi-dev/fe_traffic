@@ -123,6 +123,9 @@ const Layout = () => {
                 className="px-3 sm:px-4 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 
                            transition-all duration-300 flex items-center space-x-2 border border-white/10 hover:border-white/20"
               >
+                <span>💖</span>
+                <span className="hidden sm:inline">EQ Test</span>
+              </Link>
               
               {/* Dropdown for other tests */}
               <div className="relative" ref={dropdownRef}>
