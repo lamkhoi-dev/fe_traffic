@@ -7,7 +7,7 @@ import {
   FiBarChart2, FiSave, FiPlus, FiTrash2, FiEdit2,
   FiChevronDown, FiChevronUp, FiEye, FiCopy, FiStar,
   FiSearch, FiFilter, FiImage, FiVideo, FiCode,
-  FiAlignLeft, FiType, FiCheck
+  FiAlignLeft, FiType, FiCheck, FiSliders
 } from 'react-icons/fi'
 import { 
   FaGripVertical, FaHeading, FaParagraph, FaImage, 
@@ -1087,6 +1087,7 @@ const AdminPosts = () => {
     { icon: FiTrendingUp, label: 'Tasks', path: '/admin/tasks' },
     { icon: FiBarChart2, label: 'Stats', path: '/admin/stats' },
     { icon: FiEdit2, label: 'Bài viết', path: '/admin/posts', active: true },
+    { icon: FiSliders, label: 'Cấu hình kết quả', path: '/admin/result-config' },
     { icon: FiSettings, label: 'Cài đặt', path: '/admin/settings' },
   ]
 
