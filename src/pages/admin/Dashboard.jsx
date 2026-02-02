@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { 
   FiUsers, FiFileText, FiGlobe, FiActivity, 
   FiTrendingUp, FiClock, FiCheckCircle, FiLogOut,
-  FiMenu, FiX, FiPieChart, FiBarChart2, FiList
+  FiMenu, FiX, FiPieChart, FiBarChart2, FiList, FiSettings
 } from 'react-icons/fi'
 import api from '../../services/api'
 
@@ -65,6 +65,7 @@ const AdminDashboard = () => {
     { label: 'Quản lý Questions', icon: FiBarChart2, path: '/admin/questions' },
     { label: 'Quản lý Tasks', icon: FiList, path: '/admin/tasks' },
     { label: 'Thống kê', icon: FiTrendingUp, path: '/admin/stats' },
+    { label: 'Cài đặt', icon: FiSettings, path: '/admin/settings' },
   ]
 
   return (

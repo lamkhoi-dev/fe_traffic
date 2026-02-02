@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { 
   FiList, FiPlus, FiEdit2, FiTrash2, FiCheck, FiX,
   FiPieChart, FiGlobe, FiFileText, FiLogOut, FiMenu,
-  FiChevronDown, FiChevronUp, FiImage, FiTrendingUp, FiBarChart2
+  FiChevronDown, FiChevronUp, FiImage, FiTrendingUp, FiBarChart2, FiSettings
 } from 'react-icons/fi'
 import toast from 'react-hot-toast'
 import api from '../../services/api'
@@ -227,6 +227,7 @@ const AdminQuestions = () => {
     { label: 'Quản lý Questions', icon: FiList, path: '/admin/questions', active: true },
     { label: 'Quản lý Tasks', icon: FiBarChart2, path: '/admin/tasks' },
     { label: 'Thống kê', icon: FiTrendingUp, path: '/admin/stats' },
+    { label: 'Cài đặt', icon: FiSettings, path: '/admin/settings' },
   ]
 
   return (

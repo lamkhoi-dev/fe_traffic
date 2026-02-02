@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { 
   FiBarChart2, FiPieChart, FiGlobe, FiFileText, 
   FiLogOut, FiMenu, FiX, FiTrendingUp, FiUsers,
-  FiCalendar, FiClock, FiList
+  FiCalendar, FiClock, FiList, FiSettings
 } from 'react-icons/fi'
 import api from '../../services/api'
 
@@ -53,6 +53,7 @@ const AdminStats = () => {
     { label: 'Quản lý Questions', icon: FiBarChart2, path: '/admin/questions' },
     { label: 'Quản lý Tasks', icon: FiList, path: '/admin/tasks' },
     { label: 'Thống kê', icon: FiTrendingUp, path: '/admin/stats', active: true },
+    { label: 'Cài đặt', icon: FiSettings, path: '/admin/settings' },
   ]
 
   // Calculate bar heights for chart visualization

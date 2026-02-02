@@ -14,6 +14,8 @@ import AssessmentTest from './pages/AssessmentTest'
 import TestCategories from './pages/TestCategories'
 import MBTITest from './pages/MBTITest'
 import MBTIResult from './pages/MBTIResult'
+import Terms from './pages/Terms'
+import Privacy from './pages/Privacy'
 import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminSites from './pages/admin/Sites'
@@ -21,6 +23,7 @@ import AdminTests from './pages/admin/Tests'
 import AdminQuestions from './pages/admin/Questions'
 import AdminTasks from './pages/admin/Tasks'
 import AdminStats from './pages/admin/Stats'
+import AdminSettings from './pages/admin/Settings'
 import TestWidgetPage from './pages/TestWidgetPage'
 import Layout from './components/Layout'
 import Particles from './components/Particles'
@@ -77,6 +80,9 @@ function App() {
             {/* MBTI route */}
             <Route path="mbti" element={<MBTITest />} />
             <Route path="mbti/result/:sessionId" element={<MBTIResult />} />
+            {/* Legal pages */}
+            <Route path="terms" element={<Terms />} />
+            <Route path="privacy" element={<Privacy />} />
           </Route>
           <Route path="/test-widget" element={<TestWidgetPage />} />
           <Route path="/admin" element={<AdminLogin />} />
@@ -86,6 +92,7 @@ function App() {
           <Route path="/admin/questions" element={<AdminQuestions />} />
           <Route path="/admin/tasks" element={<AdminTasks />} />
           <Route path="/admin/stats" element={<AdminStats />} />
+          <Route path="/admin/settings" element={<AdminSettings />} />
         </Routes>
       </div>
     </Router>
