@@ -200,7 +200,7 @@ const TaskPage = () => {
                     <img 
                       src={task.step2Image} 
                       alt="Hướng dẫn bước 2" 
-                      className="rounded-lg border border-white/10 max-w-full h-auto"
+                      className="rounded-xl border-2 border-white/20 w-full h-auto shadow-lg shadow-black/30"
                       onError={(e) => e.target.style.display = 'none'}
                     />
                   </div>
@@ -223,7 +223,7 @@ const TaskPage = () => {
                     <img 
                       src={task.step3Image} 
                       alt="Hướng dẫn bước 3" 
-                      className="rounded-lg border border-white/10 max-w-full h-auto"
+                      className="rounded-xl border-2 border-white/20 w-full h-auto shadow-lg shadow-black/30"
                       onError={(e) => e.target.style.display = 'none'}
                     />
                   </div>
