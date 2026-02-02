@@ -269,7 +269,7 @@ const AdminSites = () => {
               setFormData({ name: '', domain: '', url: '', searchKeyword: '', instruction: '', isActive: true, quota: 0, priority: 1 })
               setShowModal(true)
             }}
-            className="flex items-center gap-2 px-3 md:px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl text-white font-medium hover:shadow-lg hover:shadow-purple-500/30 transition-all text-sm md:text-base flex-shrink-0"
+            className="flex items-center gap-2 px-3 md:px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl border-2 border-purple-400/50 text-white font-medium hover:shadow-lg hover:shadow-purple-500/30 hover:border-purple-300 transition-all text-sm md:text-base flex-shrink-0"
           >
             <FiPlus />
             <span className="hidden sm:inline">Thêm Site</span>

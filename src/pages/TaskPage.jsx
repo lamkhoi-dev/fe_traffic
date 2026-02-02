@@ -205,9 +205,9 @@ const TaskPage = () => {
                       navigator.clipboard.writeText(task?.searchKeyword || 'Tech Blog Vietnam traffic')
                       toast.success('Đã copy từ khóa!')
                     }}
-                    className="p-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
+                    className="px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-slate-400 font-medium text-sm"
                   >
-                    <FaClipboard className="text-slate-400" />
+                    Copy
                   </button>
                 </div>
               </div>
