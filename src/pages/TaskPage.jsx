@@ -185,50 +185,54 @@ const TaskPage = () => {
               </div>
             </div>
 
-            <div className="flex items-start space-x-4 p-4 bg-white/5 rounded-xl">
-              <span className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center 
-                              text-purple-400 font-bold flex-shrink-0">
-                2
-              </span>
-              <div className="flex-1">
-                <h3 className="font-semibold text-white mb-1">Truy cập website</h3>
-                <p className="text-slate-400 text-sm">
-                  Tìm và click vào kết quả <strong className="text-white">{task?.siteName}</strong>
-                </p>
-                {task?.step2Image && (
-                  <div className="mt-3">
-                    <img 
-                      src={task.step2Image} 
-                      alt="Hướng dẫn bước 2" 
-                      className="rounded-xl border-2 border-white/20 w-full h-auto shadow-lg shadow-black/30"
-                      onError={(e) => e.target.style.display = 'none'}
-                    />
-                  </div>
-                )}
+            <div className="p-4 bg-white/5 rounded-xl">
+              <div className="flex items-start space-x-4">
+                <span className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center 
+                                text-purple-400 font-bold flex-shrink-0">
+                  2
+                </span>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-white mb-1">Truy cập website</h3>
+                  <p className="text-slate-400 text-sm">
+                    Tìm và click vào kết quả <strong className="text-white">{task?.siteName}</strong>
+                  </p>
+                </div>
               </div>
+              {task?.step2Image && (
+                <div className="mt-4">
+                  <img 
+                    src={task.step2Image} 
+                    alt="Hướng dẫn bước 2" 
+                    className="rounded-xl border-2 border-white/20 w-full h-auto shadow-lg shadow-black/30"
+                    onError={(e) => e.target.style.display = 'none'}
+                  />
+                </div>
+              )}
             </div>
 
-            <div className="flex items-start space-x-4 p-4 bg-white/5 rounded-xl">
-              <span className="w-8 h-8 bg-pink-500/20 rounded-lg flex items-center justify-center 
-                              text-pink-400 font-bold flex-shrink-0">
-                3
-              </span>
-              <div className="flex-1">
-                <h3 className="font-semibold text-white mb-1">Lấy mã xác nhận</h3>
-                <p className="text-slate-400 text-sm">
-                  Cuộn xuống footer, bấm vào chữ "Mã Code" và đợi 60 giây để nhận mã xác nhận
-                </p>
-                {task?.step3Image && (
-                  <div className="mt-3">
-                    <img 
-                      src={task.step3Image} 
-                      alt="Hướng dẫn bước 3" 
-                      className="rounded-xl border-2 border-white/20 w-full h-auto shadow-lg shadow-black/30"
-                      onError={(e) => e.target.style.display = 'none'}
-                    />
-                  </div>
-                )}
+            <div className="p-4 bg-white/5 rounded-xl">
+              <div className="flex items-start space-x-4">
+                <span className="w-8 h-8 bg-pink-500/20 rounded-lg flex items-center justify-center 
+                                text-pink-400 font-bold flex-shrink-0">
+                  3
+                </span>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-white mb-1">Lấy mã xác nhận</h3>
+                  <p className="text-slate-400 text-sm">
+                    Cuộn xuống footer, bấm vào chữ "Mã Code" và đợi 60 giây để nhận mã xác nhận
+                  </p>
+                </div>
               </div>
+              {task?.step3Image && (
+                <div className="mt-4">
+                  <img 
+                    src={task.step3Image} 
+                    alt="Hướng dẫn bước 3" 
+                    className="rounded-xl border-2 border-white/20 w-full h-auto shadow-lg shadow-black/30"
+                    onError={(e) => e.target.style.display = 'none'}
+                  />
+                </div>
+              )}
             </div>
 
             <div className="flex items-start space-x-4 p-4 bg-white/5 rounded-xl">
