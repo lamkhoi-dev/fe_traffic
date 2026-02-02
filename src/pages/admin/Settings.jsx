@@ -5,7 +5,7 @@ import {
   FiSettings, FiPieChart, FiGlobe, FiFileText, 
   FiLogOut, FiMenu, FiX, FiTrendingUp, FiList,
   FiBarChart2, FiSave, FiPlus, FiTrash2, FiEdit2,
-  FiChevronDown, FiChevronUp
+  FiChevronDown, FiChevronUp, FiSliders
 } from 'react-icons/fi'
 import toast from 'react-hot-toast'
 import api from '../../services/api'
@@ -126,6 +126,7 @@ const AdminSettings = () => {
     { label: 'Quản lý Tasks', icon: FiList, path: '/admin/tasks' },
     { label: 'Thống kê', icon: FiTrendingUp, path: '/admin/stats' },
     { label: 'Bài viết', icon: FiEdit2, path: '/admin/posts' },
+    { label: 'Cấu hình kết quả', icon: FiSliders, path: '/admin/result-config' },
     { label: 'Cài đặt', icon: FiSettings, path: '/admin/settings', active: true },
   ]
 
