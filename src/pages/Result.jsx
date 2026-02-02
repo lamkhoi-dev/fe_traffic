@@ -1,17 +1,21 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { 
   FaBrain, FaHeart, FaTrophy, FaChartLine, FaShare, 
   FaRedo, FaDownload, FaStar, FaArrowUp, FaArrowDown,
-  FaCheckCircle, FaExclamationCircle
+  FaCheckCircle, FaExclamationCircle, FaTimesCircle, FaQuestionCircle,
+  FaChevronDown, FaChevronUp, FaLightbulb
 } from 'react-icons/fa'
 import api from '../services/api'
+import MathText from '../components/MathText'
 
 const Result = () => {
   const { sessionId } = useParams()
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [showQuestionDetails, setShowQuestionDetails] = useState(false)
+  const [questionFilter, setQuestionFilter] = useState('all') // all, correct, wrong, unanswered
 
   useEffect(() => {
     fetchResult()
@@ -227,19 +231,23 @@ const Result = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.4 }}
-              className="grid grid-cols-3 gap-4"
+              className="grid grid-cols-4 gap-3"
             >
-              <div className="p-4 bg-white/5 rounded-xl">
-                <div className="text-2xl font-bold text-white">{result?.correctAnswers}</div>
-                <div className="text-sm text-slate-400">Câu đúng</div>
+              <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-xl">
+                <div className="text-2xl font-bold text-green-400">{result?.correctAnswers || 0}</div>
+                <div className="text-xs text-slate-400">Câu đúng</div>
               </div>
-              <div className="p-4 bg-white/5 rounded-xl">
-                <div className="text-2xl font-bold text-white">{result?.percentile}%</div>
-                <div className="text-sm text-slate-400">Percentile</div>
+              <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl">
+                <div className="text-2xl font-bold text-red-400">{result?.wrongAnswers || 0}</div>
+                <div className="text-xs text-slate-400">Câu sai</div>
               </div>
-              <div className="p-4 bg-white/5 rounded-xl">
-                <div className="text-2xl font-bold text-white">{result?.timeSpent}</div>
-                <div className="text-sm text-slate-400">Thời gian</div>
+              <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
+                <div className="text-2xl font-bold text-yellow-400">{result?.unansweredQuestions || 0}</div>
+                <div className="text-xs text-slate-400">Chưa làm</div>
+              </div>
+              <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded-xl">
+                <div className="text-2xl font-bold text-blue-400">{result?.percentile}%</div>
+                <div className="text-xs text-slate-400">Percentile</div>
               </div>
             </motion.div>
           </div>
@@ -378,6 +386,266 @@ const Result = () => {
             {result?.analysis?.description}
           </p>
         </motion.div>
+
+        {/* Advice Section */}
+        {result?.advice && result.advice.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.75 }}
+            className="glass-card p-6 mb-8"
+          >
+            <h3 className="text-xl font-bold text-white mb-4 flex items-center space-x-2">
+              <FaLightbulb className="text-yellow-400" />
+              <span>Lời khuyên dành cho bạn</span>
+            </h3>
+            <ul className="space-y-3">
+              {result.advice.map((advice, index) => (
+                <motion.li
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.8 + index * 0.1 }}
+                  className="flex items-start space-x-3 text-slate-300 p-3 bg-white/5 rounded-lg"
+                >
+                  <span className="text-lg">{advice}</span>
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+
+        {/* Question Details Section */}
+        {result?.questionDetails && result.questionDetails.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+            className="glass-card p-6 mb-8"
+          >
+            {/* Header with toggle */}
+            <button 
+              onClick={() => setShowQuestionDetails(!showQuestionDetails)}
+              className="w-full flex items-center justify-between text-left"
+            >
+              <h3 className="text-xl font-bold text-white flex items-center space-x-2">
+                <FaQuestionCircle className="text-blue-400" />
+                <span>Chi tiết từng câu hỏi ({result.questionDetails.length} câu)</span>
+              </h3>
+              <motion.div
+                animate={{ rotate: showQuestionDetails ? 180 : 0 }}
+                className="text-slate-400"
+              >
+                <FaChevronDown className="text-xl" />
+              </motion.div>
+            </button>
+
+            <AnimatePresence>
+              {showQuestionDetails && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden"
+                >
+                  {/* Filter buttons */}
+                  <div className="flex flex-wrap gap-2 mt-4 mb-4">
+                    <button
+                      onClick={() => setQuestionFilter('all')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        questionFilter === 'all' 
+                          ? 'bg-blue-500 text-white' 
+                          : 'bg-white/10 text-slate-300 hover:bg-white/20'
+                      }`}
+                    >
+                      Tất cả ({result.questionDetails.length})
+                    </button>
+                    <button
+                      onClick={() => setQuestionFilter('correct')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        questionFilter === 'correct' 
+                          ? 'bg-green-500 text-white' 
+                          : 'bg-white/10 text-slate-300 hover:bg-white/20'
+                      }`}
+                    >
+                      <FaCheckCircle className="inline mr-1" />
+                      Đúng ({result.correctAnswers})
+                    </button>
+                    <button
+                      onClick={() => setQuestionFilter('wrong')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        questionFilter === 'wrong' 
+                          ? 'bg-red-500 text-white' 
+                          : 'bg-white/10 text-slate-300 hover:bg-white/20'
+                      }`}
+                    >
+                      <FaTimesCircle className="inline mr-1" />
+                      Sai ({result.wrongAnswers})
+                    </button>
+                    <button
+                      onClick={() => setQuestionFilter('unanswered')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        questionFilter === 'unanswered' 
+                          ? 'bg-yellow-500 text-white' 
+                          : 'bg-white/10 text-slate-300 hover:bg-white/20'
+                      }`}
+                    >
+                      <FaQuestionCircle className="inline mr-1" />
+                      Chưa làm ({result.unansweredQuestions})
+                    </button>
+                  </div>
+
+                  {/* Question list */}
+                  <div className="space-y-4 mt-4">
+                    {result.questionDetails
+                      .filter(q => {
+                        if (questionFilter === 'correct') return q.isCorrect
+                        if (questionFilter === 'wrong') return !q.isCorrect && !q.isUnanswered
+                        if (questionFilter === 'unanswered') return q.isUnanswered
+                        return true
+                      })
+                      .map((q, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                          className={`p-4 rounded-xl border ${
+                            q.isCorrect 
+                              ? 'bg-green-500/10 border-green-500/30'
+                              : q.isUnanswered
+                                ? 'bg-yellow-500/10 border-yellow-500/30'
+                                : 'bg-red-500/10 border-red-500/30'
+                          }`}
+                        >
+                          {/* Question header */}
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <span className={`px-2 py-1 rounded text-xs font-bold ${
+                                q.isCorrect 
+                                  ? 'bg-green-500 text-white'
+                                  : q.isUnanswered
+                                    ? 'bg-yellow-500 text-white'
+                                    : 'bg-red-500 text-white'
+                              }`}>
+                                Câu {q.questionNumber}
+                              </span>
+                              {q.isCorrect && <FaCheckCircle className="text-green-400" />}
+                              {!q.isCorrect && !q.isUnanswered && <FaTimesCircle className="text-red-400" />}
+                              {q.isUnanswered && <FaQuestionCircle className="text-yellow-400" />}
+                            </div>
+                            <span className={`text-sm font-medium ${
+                              q.isCorrect ? 'text-green-400' : q.isUnanswered ? 'text-yellow-400' : 'text-red-400'
+                            }`}>
+                              {q.isCorrect ? '+' + q.points + ' điểm' : q.isUnanswered ? 'Bỏ qua' : '0 điểm'}
+                            </span>
+                          </div>
+
+                          {/* Question text */}
+                          <div className="text-slate-200 mb-3">
+                            <MathText>{q.question}</MathText>
+                          </div>
+
+                          {/* Question image if exists */}
+                          {q.image && (
+                            <img 
+                              src={q.image} 
+                              alt="Question" 
+                              className="max-w-full h-auto rounded-lg mb-3 max-h-48 object-contain"
+                            />
+                          )}
+
+                          {/* Options */}
+                          <div className="grid gap-2">
+                            {q.options.map((opt) => {
+                              const isUserAnswer = q.userAnswer === opt.id
+                              const isCorrectAnswer = q.correctAnswer === opt.id
+                              
+                              let optionClass = 'bg-white/5 border-white/10'
+                              if (isCorrectAnswer) {
+                                optionClass = 'bg-green-500/20 border-green-500/50'
+                              } else if (isUserAnswer && !q.isCorrect) {
+                                optionClass = 'bg-red-500/20 border-red-500/50'
+                              }
+
+                              return (
+                                <div 
+                                  key={opt.id}
+                                  className={`p-3 rounded-lg border ${optionClass} flex items-center gap-3`}
+                                >
+                                  <span className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold ${
+                                    isCorrectAnswer 
+                                      ? 'bg-green-500 text-white'
+                                      : isUserAnswer && !q.isCorrect
+                                        ? 'bg-red-500 text-white'
+                                        : 'bg-white/20 text-slate-300'
+                                  }`}>
+                                    {opt.id.toUpperCase()}
+                                  </span>
+                                  <span className={`flex-1 ${
+                                    isCorrectAnswer ? 'text-green-300' : isUserAnswer && !q.isCorrect ? 'text-red-300' : 'text-slate-300'
+                                  }`}>
+                                    <MathText>{opt.text}</MathText>
+                                  </span>
+                                  {isCorrectAnswer && (
+                                    <FaCheckCircle className="text-green-400" />
+                                  )}
+                                  {isUserAnswer && !q.isCorrect && (
+                                    <FaTimesCircle className="text-red-400" />
+                                  )}
+                                </div>
+                              )
+                            })}
+                          </div>
+
+                          {/* Explanation if exists */}
+                          {q.explanation && (
+                            <div className="mt-3 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                              <div className="flex items-center gap-2 text-blue-400 text-sm font-medium mb-1">
+                                <FaLightbulb />
+                                <span>Giải thích:</span>
+                              </div>
+                              <p className="text-slate-300 text-sm">
+                                <MathText>{q.explanation}</MathText>
+                              </p>
+                            </div>
+                          )}
+
+                          {/* Show correct answer summary for wrong/unanswered */}
+                          {!q.isCorrect && (
+                            <div className="mt-3 text-sm">
+                              <span className="text-slate-400">Đáp án đúng: </span>
+                              <span className="text-green-400 font-medium">{q.correctAnswer.toUpperCase()}</span>
+                              {!q.isUnanswered && (
+                                <>
+                                  <span className="text-slate-400"> | Bạn chọn: </span>
+                                  <span className="text-red-400 font-medium">{q.userAnswer?.toUpperCase() || 'N/A'}</span>
+                                </>
+                              )}
+                            </div>
+                          )}
+                        </motion.div>
+                      ))}
+                  </div>
+
+                  {/* Empty state for filter */}
+                  {result.questionDetails.filter(q => {
+                    if (questionFilter === 'correct') return q.isCorrect
+                    if (questionFilter === 'wrong') return !q.isCorrect && !q.isUnanswered
+                    if (questionFilter === 'unanswered') return q.isUnanswered
+                    return true
+                  }).length === 0 && (
+                    <div className="text-center py-8 text-slate-400">
+                      <FaQuestionCircle className="text-4xl mx-auto mb-2 opacity-50" />
+                      <p>Không có câu hỏi nào trong danh mục này</p>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        )}
 
         {/* Action Buttons */}
         <motion.div
