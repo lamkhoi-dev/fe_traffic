@@ -17,6 +17,14 @@ const AdminSites = () => {
   const [editingSite, setEditingSite] = useState(null)
   const [showCodeModal, setShowCodeModal] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [showTaskStepsModal, setShowTaskStepsModal] = useState(null)
+  const defaultTaskSteps = {
+    step1: { label: '1', title: 'Tìm kiếm trên Google', description: 'Mở Google và tìm kiếm từ khóa:' },
+    step2: { label: '2', title: 'Truy cập website', description: 'Tìm và click vào kết quả' },
+    step3: { label: '3', title: 'Lấy mã xác nhận', description: 'Cuộn xuống footer, bấm vào chữ "Mã Code" và đợi 60 giây để nhận mã xác nhận' },
+    step4: { label: '4', title: 'Nhập mã bên dưới', description: 'Copy mã và dán vào ô bên dưới để xem kết quả' }
+  }
+  const [taskStepsForm, setTaskStepsForm] = useState(defaultTaskSteps)
   const [formData, setFormData] = useState({
     name: '',
     domain: '',
@@ -108,6 +116,27 @@ const AdminSites = () => {
       fetchSites()
     } catch (error) {
       toast.error('Không thể reset quota')
+    }
+  }
+
+  const handleEditTaskSteps = (site) => {
+    setShowTaskStepsModal(site)
+    setTaskStepsForm({
+      step1: { ...defaultTaskSteps.step1, ...site.taskSteps?.step1 },
+      step2: { ...defaultTaskSteps.step2, ...site.taskSteps?.step2 },
+      step3: { ...defaultTaskSteps.step3, ...site.taskSteps?.step3 },
+      step4: { ...defaultTaskSteps.step4, ...site.taskSteps?.step4 }
+    })
+  }
+
+  const handleSaveTaskSteps = async () => {
+    try {
+      await api.put(`/api/sites/${showTaskStepsModal._id}`, { taskSteps: taskStepsForm })
+      toast.success('Cập nhật nội dung các bước thành công!')
+      setShowTaskStepsModal(null)
+      fetchSites()
+    } catch (error) {
+      toast.error('Không thể cập nhật')
     }
   }
 
@@ -339,6 +368,13 @@ const AdminSites = () => {
                         Widget
                       </button>
                       <button
+                        onClick={() => handleEditTaskSteps(site)}
+                        className="flex items-center gap-2 px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 rounded-xl text-purple-400 transition-all text-sm"
+                      >
+                        <FiList className="w-4 h-4" />
+                        Tuỳ chỉnh bước
+                      </button>
+                      <button
                         onClick={() => handleResetQuota(site)}
                         className="flex items-center gap-2 px-4 py-2 bg-yellow-500/20 hover:bg-yellow-500/30 rounded-xl text-yellow-400 transition-all text-sm"
                       >
@@ -367,6 +403,114 @@ const AdminSites = () => {
           )}
         </main>
       </div>
+
+      {/* Task Steps Configuration Modal */}
+      <AnimatePresence>
+        {showTaskStepsModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+            onClick={() => setShowTaskStepsModal(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-slate-800 rounded-2xl p-6 w-full max-w-2xl border border-white/10 max-h-[90vh] overflow-y-auto"
+              onClick={e => e.stopPropagation()}
+            >
+              <h3 className="text-xl font-bold text-white mb-2">
+                Tuỳ chỉnh nội dung các bước nhiệm vụ
+              </h3>
+              <p className="text-white/60 text-sm mb-6">Site: {showTaskStepsModal.name}</p>
+              
+              <div className="space-y-6">
+                {['step1', 'step2', 'step3', 'step4'].map((stepKey, index) => (
+                  <div key={stepKey} className="p-4 bg-white/5 rounded-xl border border-white/10">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm ${
+                        index === 0 ? 'bg-blue-500/20 text-blue-400' :
+                        index === 1 ? 'bg-purple-500/20 text-purple-400' :
+                        index === 2 ? 'bg-pink-500/20 text-pink-400' :
+                        'bg-green-500/20 text-green-400'
+                      }`}>
+                        {taskStepsForm[stepKey].label}
+                      </span>
+                      <h4 className="text-white font-medium">Bước {index + 1}</h4>
+                    </div>
+                    
+                    <div className="grid gap-3">
+                      <div>
+                        <label className="block text-white/60 text-xs mb-1">Ký hiệu (1, 2, 3...)</label>
+                        <input
+                          type="text"
+                          value={taskStepsForm[stepKey].label}
+                          onChange={e => setTaskStepsForm({
+                            ...taskStepsForm,
+                            [stepKey]: { ...taskStepsForm[stepKey], label: e.target.value }
+                          })}
+                          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-purple-500 text-sm"
+                          placeholder="VD: 1, A, ★..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-white/60 text-xs mb-1">Tiêu đề</label>
+                        <input
+                          type="text"
+                          value={taskStepsForm[stepKey].title}
+                          onChange={e => setTaskStepsForm({
+                            ...taskStepsForm,
+                            [stepKey]: { ...taskStepsForm[stepKey], title: e.target.value }
+                          })}
+                          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-purple-500 text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-white/60 text-xs mb-1">Mô tả</label>
+                        <textarea
+                          value={taskStepsForm[stepKey].description}
+                          onChange={e => setTaskStepsForm({
+                            ...taskStepsForm,
+                            [stepKey]: { ...taskStepsForm[stepKey], description: e.target.value }
+                          })}
+                          rows={2}
+                          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-purple-500 text-sm"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex gap-3 pt-6">
+                <button
+                  type="button"
+                  onClick={() => setTaskStepsForm(defaultTaskSteps)}
+                  className="px-4 py-3 bg-yellow-500/20 hover:bg-yellow-500/30 rounded-xl text-yellow-400 transition-all"
+                >
+                  Reset mặc định
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowTaskStepsModal(null)}
+                  className="flex-1 px-4 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-all"
+                >
+                  Hủy
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSaveTaskSteps}
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl text-white font-medium hover:shadow-lg hover:shadow-purple-500/30 transition-all"
+                >
+                  Lưu thay đổi
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Add/Edit Modal */}
       <AnimatePresence>

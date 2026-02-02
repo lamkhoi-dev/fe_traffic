@@ -189,12 +189,12 @@ const TaskPage = () => {
             <div className="flex items-start space-x-3 p-3 bg-white/5 md:rounded-xl">
               <span className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center 
                               text-blue-400 font-bold flex-shrink-0">
-                1
+                {task?.taskSteps?.step1?.label || '1'}
               </span>
               <div>
-                <h3 className="font-semibold text-white mb-1">Tìm kiếm trên Google</h3>
+                <h3 className="font-semibold text-white mb-1">{task?.taskSteps?.step1?.title || 'Tìm kiếm trên Google'}</h3>
                 <p className="text-slate-400 text-sm mb-2">
-                  Mở Google và tìm kiếm từ khóa:
+                  {task?.taskSteps?.step1?.description || 'Mở Google và tìm kiếm từ khóa:'}
                 </p>
                 <div className="flex items-center space-x-2">
                   <code className="px-3 py-2 bg-slate-800 rounded-lg text-green-400 text-sm">
@@ -217,12 +217,12 @@ const TaskPage = () => {
               <div className="flex items-start space-x-3">
                 <span className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center 
                                 text-purple-400 font-bold flex-shrink-0">
-                  2
+                  {task?.taskSteps?.step2?.label || '2'}
                 </span>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-white mb-1">Truy cập website</h3>
+                  <h3 className="font-semibold text-white mb-1">{task?.taskSteps?.step2?.title || 'Truy cập website'}</h3>
                   <p className="text-slate-400 text-sm">
-                    Tìm và click vào kết quả <strong className="text-white">{task?.siteName}</strong>
+                    {task?.taskSteps?.step2?.description || 'Tìm và click vào kết quả'} <strong className="text-white">{task?.siteName}</strong>
                   </p>
                 </div>
               </div>
@@ -245,12 +245,12 @@ const TaskPage = () => {
               <div className="flex items-start space-x-3">
                 <span className="w-8 h-8 bg-pink-500/20 rounded-lg flex items-center justify-center 
                                 text-pink-400 font-bold flex-shrink-0">
-                  3
+                  {task?.taskSteps?.step3?.label || '3'}
                 </span>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-white mb-1">Lấy mã xác nhận</h3>
+                  <h3 className="font-semibold text-white mb-1">{task?.taskSteps?.step3?.title || 'Lấy mã xác nhận'}</h3>
                   <p className="text-slate-400 text-sm">
-                    Cuộn xuống footer, bấm vào chữ "Mã Code" và đợi 60 giây để nhận mã xác nhận
+                    {task?.taskSteps?.step3?.description || 'Cuộn xuống footer, bấm vào chữ "Mã Code" và đợi 60 giây để nhận mã xác nhận'}
                   </p>
                 </div>
               </div>
@@ -272,12 +272,12 @@ const TaskPage = () => {
             <div className="flex items-start space-x-3 p-3 bg-white/5 md:rounded-xl">
               <span className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center 
                               text-green-400 font-bold flex-shrink-0">
-                4
+                {task?.taskSteps?.step4?.label || '4'}
               </span>
               <div>
-                <h3 className="font-semibold text-white mb-1">Nhập mã bên dưới</h3>
+                <h3 className="font-semibold text-white mb-1">{task?.taskSteps?.step4?.title || 'Nhập mã bên dưới'}</h3>
                 <p className="text-slate-400 text-sm">
-                  Copy mã và dán vào ô bên dưới để xem kết quả
+                  {task?.taskSteps?.step4?.description || 'Copy mã và dán vào ô bên dưới để xem kết quả'}
                 </p>
               </div>
             </div>
