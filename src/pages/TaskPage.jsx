@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { 
   FaClipboard, FaCheck, FaExternalLinkAlt, FaArrowRight,
-  FaSearch, FaGlobe, FaKey, FaInfoCircle
+  FaSearch, FaGlobe, FaKey, FaInfoCircle, FaTimes, FaSearchPlus
 } from 'react-icons/fa'
 import api from '../services/api'
 import { getDeviceFingerprint } from '../utils/fingerprint'
@@ -18,6 +18,7 @@ const TaskPage = () => {
   const [loading, setLoading] = useState(true)
   const [verifying, setVerifying] = useState(false)
   const [verified, setVerified] = useState(false)
+  const [zoomImage, setZoomImage] = useState(null)
 
   useEffect(() => {
     fetchTask()
@@ -98,6 +99,33 @@ const TaskPage = () => {
   return (
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-2xl mx-auto">
+        {/* Image Zoom Modal */}
+        {zoomImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+            onClick={() => setZoomImage(null)}
+          >
+            <button 
+              className="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full 
+                         flex items-center justify-center transition-colors z-10"
+              onClick={() => setZoomImage(null)}
+            >
+              <FaTimes className="text-white text-xl" />
+            </button>
+            <motion.img
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              src={zoomImage}
+              alt="Zoom"
+              className="max-w-full max-h-[90vh] rounded-xl shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </motion.div>
+        )}
+
         {/* Success animation */}
         {verified && (
           <motion.div
@@ -157,8 +185,8 @@ const TaskPage = () => {
           </div>
 
           {/* Steps */}
-          <div className="space-y-4 mb-8">
-            <div className="flex items-start space-x-4 p-4 bg-white/5 rounded-xl">
+          <div className="space-y-3 mb-6">
+            <div className="flex items-start space-x-3 p-3 bg-white/5 rounded-xl">
               <span className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center 
                               text-blue-400 font-bold flex-shrink-0">
                 1
@@ -185,8 +213,8 @@ const TaskPage = () => {
               </div>
             </div>
 
-            <div className="p-4 bg-white/5 rounded-xl">
-              <div className="flex items-start space-x-4">
+            <div className="p-3 bg-white/5 rounded-xl">
+              <div className="flex items-start space-x-3">
                 <span className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center 
                                 text-purple-400 font-bold flex-shrink-0">
                   2
@@ -199,19 +227,22 @@ const TaskPage = () => {
                 </div>
               </div>
               {task?.step2Image && (
-                <div className="mt-4">
+                <div className="mt-3 relative group cursor-pointer" onClick={() => setZoomImage(task.step2Image)}>
                   <img 
                     src={task.step2Image} 
                     alt="Hướng dẫn bước 2" 
-                    className="rounded-xl border-2 border-white/20 w-full h-auto shadow-lg shadow-black/30"
+                    className="rounded-xl border-2 border-white/20 w-full h-auto shadow-lg shadow-black/30 transition-transform hover:scale-[1.02]"
                     onError={(e) => e.target.style.display = 'none'}
                   />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded-xl flex items-center justify-center">
+                    <FaSearchPlus className="text-white opacity-0 group-hover:opacity-100 text-2xl transition-opacity" />
+                  </div>
                 </div>
               )}
             </div>
 
-            <div className="p-4 bg-white/5 rounded-xl">
-              <div className="flex items-start space-x-4">
+            <div className="p-3 bg-white/5 rounded-xl">
+              <div className="flex items-start space-x-3">
                 <span className="w-8 h-8 bg-pink-500/20 rounded-lg flex items-center justify-center 
                                 text-pink-400 font-bold flex-shrink-0">
                   3
@@ -224,18 +255,21 @@ const TaskPage = () => {
                 </div>
               </div>
               {task?.step3Image && (
-                <div className="mt-4">
+                <div className="mt-3 relative group cursor-pointer" onClick={() => setZoomImage(task.step3Image)}>
                   <img 
                     src={task.step3Image} 
                     alt="Hướng dẫn bước 3" 
-                    className="rounded-xl border-2 border-white/20 w-full h-auto shadow-lg shadow-black/30"
+                    className="rounded-xl border-2 border-white/20 w-full h-auto shadow-lg shadow-black/30 transition-transform hover:scale-[1.02]"
                     onError={(e) => e.target.style.display = 'none'}
                   />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded-xl flex items-center justify-center">
+                    <FaSearchPlus className="text-white opacity-0 group-hover:opacity-100 text-2xl transition-opacity" />
+                  </div>
                 </div>
               )}
             </div>
 
-            <div className="flex items-start space-x-4 p-4 bg-white/5 rounded-xl">
+            <div className="flex items-start space-x-3 p-3 bg-white/5 rounded-xl">
               <span className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center 
                               text-green-400 font-bold flex-shrink-0">
                 4
