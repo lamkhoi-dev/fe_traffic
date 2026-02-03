@@ -126,7 +126,7 @@ const AdminSettings = () => {
     { label: 'Quản lý Tasks', icon: FiList, path: '/admin/tasks' },
     { label: 'Thống kê', icon: FiTrendingUp, path: '/admin/stats' },
     { label: 'Bài viết', icon: FiEdit2, path: '/admin/posts' },
-    { label: 'Cấu hình kết quả', icon: FiSliders, path: '/admin/result-config' },
+    { label: 'Cấu hình kết quả', icon: FiSliders, path: '/admin/result-profiles' },
     { label: 'Cài đặt', icon: FiSettings, path: '/admin/settings', active: true },
   ]
 

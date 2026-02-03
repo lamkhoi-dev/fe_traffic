@@ -28,6 +28,7 @@ import AdminStats from './pages/admin/Stats'
 import AdminSettings from './pages/admin/Settings'
 import AdminPosts from './pages/admin/Posts'
 import AdminResultConfig from './pages/admin/ResultConfig'
+import AdminResultProfiles from './pages/admin/ResultProfiles'
 import TestWidgetPage from './pages/TestWidgetPage'
 import Layout from './components/Layout'
 import Particles from './components/Particles'
@@ -102,6 +103,7 @@ function App() {
           <Route path="/admin/settings" element={<AdminSettings />} />
           <Route path="/admin/posts" element={<AdminPosts />} />
           <Route path="/admin/result-config" element={<AdminResultConfig />} />
+          <Route path="/admin/result-profiles" element={<AdminResultProfiles />} />
         </Routes>
       </div>
     </Router>

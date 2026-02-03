@@ -1087,7 +1087,7 @@ const AdminPosts = () => {
     { icon: FiTrendingUp, label: 'Tasks', path: '/admin/tasks' },
     { icon: FiBarChart2, label: 'Stats', path: '/admin/stats' },
     { icon: FiEdit2, label: 'Bài viết', path: '/admin/posts', active: true },
-    { icon: FiSliders, label: 'Cấu hình kết quả', path: '/admin/result-config' },
+    { icon: FiSliders, label: 'Cấu hình kết quả', path: '/admin/result-profiles' },
     { icon: FiSettings, label: 'Cài đặt', path: '/admin/settings' },
   ]
 

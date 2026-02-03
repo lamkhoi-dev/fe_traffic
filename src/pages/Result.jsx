@@ -38,15 +38,22 @@ const Result = () => {
     }
   }
 
-  const getScoreColor = (score) => {
-    if (score >= 130) return 'from-yellow-400 to-orange-500'
-    if (score >= 115) return 'from-green-400 to-emerald-500'
-    if (score >= 100) return 'from-blue-400 to-cyan-500'
-    if (score >= 85) return 'from-purple-400 to-pink-500'
-    return 'from-slate-400 to-slate-500'
+  const getScoreColor = (score, theme) => {
+    // Use theme gradients if available
+    const gradients = theme?.gradients || {}
+    if (score >= 130) return gradients.excellent || 'from-yellow-400 to-orange-500'
+    if (score >= 115) return gradients.good || 'from-green-400 to-emerald-500'
+    if (score >= 100) return gradients.average || 'from-blue-400 to-cyan-500'
+    if (score >= 85) return gradients.belowAverage || 'from-purple-400 to-pink-500'
+    return gradients.needsWork || 'from-slate-400 to-slate-500'
   }
 
-  const getScoreLabel = (score) => {
+  const getScoreLabel = (score, analysis) => {
+    // Use analysis from API if available
+    if (analysis?.level && analysis?.emoji) {
+      return { text: analysis.level, emoji: analysis.emoji }
+    }
+    // Fallback
     if (score >= 130) return { text: 'Xuất sắc', emoji: '🏆' }
     if (score >= 115) return { text: 'Trên trung bình', emoji: '⭐' }
     if (score >= 100) return { text: 'Trung bình', emoji: '👍' }
@@ -94,8 +101,12 @@ const Result = () => {
   const isIQ = result?.type === 'iq'
   const gradientFrom = isIQ ? 'from-blue-500' : 'from-orange-500'
   const gradientTo = isIQ ? 'to-purple-600' : 'to-pink-600'
-  const scoreLabel = getScoreLabel(result?.score)
-  const scoreGradient = getScoreColor(result?.score)
+  const scoreLabel = getScoreLabel(result?.score, result?.analysis)
+  const scoreGradient = getScoreColor(result?.score, result?.theme)
+  
+  // Get labels from profile or use defaults
+  const labels = result?.labels || {}
+  const displayOptions = result?.displayOptions || {}
 
   return (
     <div className="min-h-screen py-12 px-4">
@@ -147,9 +158,9 @@ const Result = () => {
           >
             <FaTrophy className="text-5xl text-white" />
           </motion.div>
-          <h1 className="text-4xl font-bold text-white mb-2">Chúc mừng!</h1>
+          <h1 className="text-4xl font-bold text-white mb-2">{labels.congratulations || 'Chúc mừng!'}</h1>
           <p className="text-xl text-slate-400">
-            Bạn đã hoàn thành bài test {result?.testName}
+            {labels.completedTest || 'Bạn đã hoàn thành bài test'} {result?.testName}
           </p>
         </motion.div>
 
@@ -209,7 +220,7 @@ const Result = () => {
                 >
                   {result?.score}
                 </motion.span>
-                <span className="text-slate-400 text-sm">/ {result?.maxScore}</span>
+                <span className="text-slate-400 text-sm">/ {result?.maxScore || 150}</span>
               </div>
             </div>
 
@@ -235,25 +246,26 @@ const Result = () => {
             >
               <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-xl">
                 <div className="text-2xl font-bold text-green-400">{result?.correctAnswers || 0}</div>
-                <div className="text-xs text-slate-400">Câu đúng</div>
+                <div className="text-xs text-slate-400">{labels.correctAnswers || 'Câu đúng'}</div>
               </div>
               <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl">
                 <div className="text-2xl font-bold text-red-400">{result?.wrongAnswers || 0}</div>
-                <div className="text-xs text-slate-400">Câu sai</div>
+                <div className="text-xs text-slate-400">{labels.wrongAnswers || 'Câu sai'}</div>
               </div>
               <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
                 <div className="text-2xl font-bold text-yellow-400">{result?.unansweredQuestions || 0}</div>
-                <div className="text-xs text-slate-400">Chưa làm</div>
+                <div className="text-xs text-slate-400">{labels.unanswered || 'Chưa làm'}</div>
               </div>
               <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded-xl">
                 <div className="text-2xl font-bold text-blue-400">{result?.percentile}%</div>
-                <div className="text-xs text-slate-400">Percentile</div>
+                <div className="text-xs text-slate-400">{labels.percentile || 'Percentile'}</div>
               </div>
             </motion.div>
           </div>
         </motion.div>
 
         {/* Analysis Section */}
+        {displayOptions.showStrengths !== false && (
         <div className="grid md:grid-cols-2 gap-6 mb-8">
           {/* Strengths */}
           <motion.div
@@ -264,7 +276,7 @@ const Result = () => {
           >
             <h3 className="text-xl font-bold text-white mb-4 flex items-center space-x-2">
               <FaCheckCircle className="text-green-400" />
-              <span>Điểm mạnh</span>
+              <span>{labels.strengths || 'Điểm mạnh'}</span>
             </h3>
             <ul className="space-y-3">
               {result?.analysis?.strengths.map((strength, index) => (
@@ -291,7 +303,7 @@ const Result = () => {
           >
             <h3 className="text-xl font-bold text-white mb-4 flex items-center space-x-2">
               <FaExclamationCircle className="text-yellow-400" />
-              <span>Cần cải thiện</span>
+              <span>{labels.improvements || 'Cần cải thiện'}</span>
             </h3>
             <ul className="space-y-3">
               {result?.analysis?.improvements.map((item, index) => (
@@ -309,8 +321,10 @@ const Result = () => {
             </ul>
           </motion.div>
         </div>
+        )}
 
         {/* Comparison Chart */}
+        {displayOptions.showComparison !== false && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -319,7 +333,7 @@ const Result = () => {
         >
           <h3 className="text-xl font-bold text-white mb-6 flex items-center space-x-2">
             <FaChartLine className="text-blue-400" />
-            <span>So sánh với người khác</span>
+            <span>{labels.comparison || 'So sánh với người khác'}</span>
           </h3>
           
           <div className="relative h-20 mb-4">
@@ -375,20 +389,22 @@ const Result = () => {
         </motion.div>
 
         {/* Description */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-          className="glass-card p-6 mb-8"
-        >
-          <h3 className="text-xl font-bold text-white mb-4">📝 Nhận xét chi tiết</h3>
-          <p className="text-slate-300 leading-relaxed">
-            {result?.analysis?.description}
-          </p>
-        </motion.div>
+        {displayOptions.showDescription !== false && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+            className="glass-card p-6 mb-8"
+          >
+            <h3 className="text-xl font-bold text-white mb-4">📝 {labels.description || 'Nhận xét chi tiết'}</h3>
+            <p className="text-slate-300 leading-relaxed">
+              {result?.analysis?.description}
+            </p>
+          </motion.div>
+        )}
 
         {/* Advice Section */}
-        {result?.advice && result.advice.length > 0 && (
+        {displayOptions.showAdvice !== false && result?.advice && result.advice.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -397,7 +413,7 @@ const Result = () => {
           >
             <h3 className="text-xl font-bold text-white mb-4 flex items-center space-x-2">
               <FaLightbulb className="text-yellow-400" />
-              <span>Lời khuyên dành cho bạn</span>
+              <span>{labels.advice || 'Lời khuyên dành cho bạn'}</span>
             </h3>
             <ul className="space-y-3">
               {result.advice.map((advice, index) => (
@@ -416,7 +432,7 @@ const Result = () => {
         )}
 
         {/* Question Details Section */}
-        {result?.questionDetails && result.questionDetails.length > 0 && (
+        {displayOptions.showQuestionDetails !== false && result?.questionDetails && result.questionDetails.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -430,7 +446,7 @@ const Result = () => {
             >
               <h3 className="text-xl font-bold text-white flex items-center space-x-2">
                 <FaQuestionCircle className="text-blue-400" />
-                <span>Chi tiết từng câu hỏi ({result.questionDetails.length} câu)</span>
+                <span>{labels.questionDetails || 'Chi tiết từng câu hỏi'} ({result.questionDetails.length} câu)</span>
               </h3>
               <motion.div
                 animate={{ rotate: showQuestionDetails ? 180 : 0 }}
@@ -663,7 +679,7 @@ const Result = () => {
                          shadow-lg shadow-blue-500/25"
             >
               <FaRedo />
-              <span>Làm bài test khác</span>
+              <span>{labels.retryButton || 'Làm bài test khác'}</span>
             </motion.button>
           </Link>
           
@@ -675,7 +691,7 @@ const Result = () => {
                        hover:bg-white/20 transition-colors"
           >
             <FaShare />
-            <span>Chia sẻ kết quả</span>
+            <span>{labels.shareButton || 'Chia sẻ kết quả'}</span>
           </motion.button>
         </motion.div>
       </div>
