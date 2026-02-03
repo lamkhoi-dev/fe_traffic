@@ -10,7 +10,7 @@ import MathText from '../MathText'
 
 /**
  * PointsResult - Result layout for point-based scoring
- * Shows score = correctCount × pointsPerQuestion
+ * Shows score = sum of actual points from each correct answer
  */
 const PointsResult = ({ result }) => {
   const [showQuestionDetails, setShowQuestionDetails] = useState(false)
@@ -28,8 +28,8 @@ const PointsResult = ({ result }) => {
   const totalQuestions = result.totalQuestions || 0
   const wrongAnswers = result.wrongAnswers || 0
   const unanswered = result.unanswered || 0
-  const pointsPerQuestion = pointsConfig.pointsPerQuestion || result.pointsPerQuestion || 10
   const passingScore = pointsConfig.passingScore || 0
+  const questionPoints = result.questionPoints || [] // Chi tiết điểm từng câu
 
   const percent = maxScore > 0 ? Math.round((score / maxScore) * 100) : 0
   const isPassed = passingScore > 0 ? score >= passingScore : percent >= 50
@@ -175,7 +175,7 @@ const PointsResult = ({ result }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="grid grid-cols-4 gap-4 mb-8"
+          className="grid grid-cols-3 gap-4 mb-8"
         >
           <div className="glass-card p-4 text-center">
             <div className="text-3xl font-bold text-white">{correctAnswers}</div>
@@ -193,12 +193,6 @@ const PointsResult = ({ result }) => {
             <div className="text-3xl font-bold text-white">{unanswered}</div>
             <div className="text-xs text-gray-400 flex items-center justify-center gap-1">
               <FaQuestionCircle /> Bỏ qua
-            </div>
-          </div>
-          <div className="glass-card p-4 text-center">
-            <div className="text-3xl font-bold text-white">{pointsPerQuestion}</div>
-            <div className="text-xs text-blue-400 flex items-center justify-center gap-1">
-              <FaStar /> Điểm/câu
             </div>
           </div>
         </motion.div>
@@ -234,11 +228,13 @@ const PointsResult = ({ result }) => {
 
             {/* Formula */}
             <div className="bg-slate-800/50 rounded-lg p-4 text-center">
-              <div className="text-gray-400 text-sm mb-2">Công thức tính điểm:</div>
-              <div className="text-white font-mono">
-                <span className="text-green-400">{correctAnswers}</span> câu đúng × 
-                <span className="text-blue-400"> {pointsPerQuestion}</span> điểm = 
+              <div className="text-gray-400 text-sm mb-2">Cách tính điểm:</div>
+              <div className="text-white">
+                Cộng điểm thực tế của <span className="text-green-400 font-bold">{correctAnswers}</span> câu trả lời đúng = 
                 <span className="text-yellow-400 font-bold"> {score}</span> điểm
+              </div>
+              <div className="text-gray-500 text-xs mt-1">
+                (Tổng điểm tối đa: {maxScore} điểm)
               </div>
             </div>
           </div>
@@ -342,9 +338,12 @@ const PointsResult = ({ result }) => {
                               </div>
                             </div>
                             <div className="text-right text-sm">
-                              <span className={q.isCorrect ? 'text-green-400' : 'text-red-400'}>
-                                {q.isCorrect ? `+${pointsPerQuestion}` : '0'} điểm
-                              </span>
+                              <div className={q.isCorrect ? 'text-green-400' : 'text-red-400'}>
+                                {q.isCorrect ? `+${q.earnedPoints || q.points || 0}` : '0'} điểm
+                              </div>
+                              <div className="text-gray-500 text-xs">
+                                (max: {q.points || 0})
+                              </div>
                             </div>
                           </div>
                         </div>

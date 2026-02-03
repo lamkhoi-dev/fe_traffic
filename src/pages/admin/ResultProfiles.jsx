@@ -545,7 +545,7 @@ const ProfileEditorModal = ({ profile, testTypes, onSave, onClose }) => {
     layoutType: profile?.layoutType || 'score',
     scoreConfig: profile?.scoreConfig || { scoreLevels: [], adviceRanges: [], minScore: 70, maxScore: 150 },
     percentConfig: profile?.percentConfig || { percentRanges: [], passingPercent: 50 },
-    pointsConfig: profile?.pointsConfig || { pointsPerQuestion: 10, maxScore: 0, passingScore: 0, showCorrectAnswers: true, showWrongAnswers: true, showQuestionReview: true },
+    pointsConfig: profile?.pointsConfig || { passingScore: 0, showCorrectAnswers: true, showWrongAnswers: true, showQuestionReview: true },
     mbtiConfig: profile?.mbtiConfig || { dimensions: [], types: [] },
     displayOptions: profile?.displayOptions || {},
     theme: profile?.theme || {},
@@ -783,39 +783,11 @@ const ProfileEditorModal = ({ profile, testTypes, onSave, onClose }) => {
                   <h3 className="text-white font-medium flex items-center gap-2">
                     <FiSliders /> Cấu hình điểm số
                   </h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-1">Điểm mỗi câu đúng</label>
-                      <input
-                        type="number"
-                        value={formData.pointsConfig?.pointsPerQuestion || 10}
-                        onChange={e => setFormData({
-                          ...formData,
-                          pointsConfig: { 
-                            ...formData.pointsConfig, 
-                            pointsPerQuestion: parseInt(e.target.value) || 10 
-                          }
-                        })}
-                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white"
-                      />
-                      <p className="text-xs text-gray-500 mt-1">VD: 10 điểm/câu → 20 câu = 200 điểm tối đa</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-1">Điểm tối đa (0 = tự tính)</label>
-                      <input
-                        type="number"
-                        value={formData.pointsConfig?.maxScore || 0}
-                        onChange={e => setFormData({
-                          ...formData,
-                          pointsConfig: { 
-                            ...formData.pointsConfig, 
-                            maxScore: parseInt(e.target.value) || 0 
-                          }
-                        })}
-                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white"
-                      />
-                      <p className="text-xs text-gray-500 mt-1">Để 0 sẽ tự động tính = câu × điểm/câu</p>
-                    </div>
+                  <div className="bg-blue-900/30 border border-blue-500/30 rounded-lg p-4 mb-4">
+                    <p className="text-blue-300 text-sm">
+                      <strong>Lưu ý:</strong> Điểm được lấy từ field <code className="bg-slate-700 px-1 rounded">points</code> của mỗi câu hỏi (mặc định: 5 điểm/câu).
+                      Tổng điểm = cộng điểm của các câu trả lời đúng.
+                    </p>
                   </div>
                   <div>
                     <label className="block text-sm text-gray-400 mb-1">Điểm đạt (0 = không check)</label>
@@ -831,6 +803,7 @@ const ProfileEditorModal = ({ profile, testTypes, onSave, onClose }) => {
                       })}
                       className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white"
                     />
+                    <p className="text-xs text-gray-500 mt-1">Nếu đạt >= điểm này sẽ hiện "ĐẠT", ngược lại hiện "CHƯA ĐẠT"</p>
                   </div>
                   <div className="flex flex-wrap gap-4 mt-4">
                     <label className="flex items-center gap-2 text-gray-300">
