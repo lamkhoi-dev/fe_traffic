@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FaExclamationCircle, FaRedo } from 'react-icons/fa'
 import api from '../services/api'
-import { ScoreResult, PercentResult, MBTIResult } from '../components/results'
+import { ScoreResult, PercentResult, PointsResult, MBTIResult } from '../components/results'
 
 /**
  * Result - Router component that renders the appropriate result layout
@@ -77,6 +77,9 @@ const Result = () => {
 
   // Render appropriate component based on layout type
   switch (layoutType) {
+    case 'points':
+      return <PointsResult result={result} />
+    
     case 'percent':
       return <PercentResult result={result} />
     

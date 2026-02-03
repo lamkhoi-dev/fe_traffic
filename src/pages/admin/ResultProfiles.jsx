@@ -40,11 +40,15 @@ const ProfileList = ({ profiles, selectedProfile, onSelect, onDelete, onClone, o
               <div className="flex items-center gap-2 mt-1 text-xs text-gray-400">
                 <span className={`px-2 py-0.5 rounded-full ${
                   profile.layoutType === 'score' ? 'bg-blue-500/20 text-blue-400' :
+                  profile.layoutType === 'points' ? 'bg-yellow-500/20 text-yellow-400' :
                   profile.layoutType === 'percent' ? 'bg-green-500/20 text-green-400' :
                   profile.layoutType === 'mbti' ? 'bg-purple-500/20 text-purple-400' :
                   'bg-gray-500/20 text-gray-400'
                 }`}>
-                  {profile.layoutType}
+                  {profile.layoutType === 'score' ? 'IQ/EQ' : 
+                   profile.layoutType === 'points' ? 'Điểm số' :
+                   profile.layoutType === 'percent' ? 'Phần trăm' :
+                   profile.layoutType}
                 </span>
                 <span className="truncate">{profile.testTypes?.join(', ')}</span>
               </div>
@@ -541,6 +545,7 @@ const ProfileEditorModal = ({ profile, testTypes, onSave, onClose }) => {
     layoutType: profile?.layoutType || 'score',
     scoreConfig: profile?.scoreConfig || { scoreLevels: [], adviceRanges: [], minScore: 70, maxScore: 150 },
     percentConfig: profile?.percentConfig || { percentRanges: [], passingPercent: 50 },
+    pointsConfig: profile?.pointsConfig || { pointsPerQuestion: 10, maxScore: 0, passingScore: 0, showCorrectAnswers: true, showWrongAnswers: true, showQuestionReview: true },
     mbtiConfig: profile?.mbtiConfig || { dimensions: [], types: [] },
     displayOptions: profile?.displayOptions || {},
     theme: profile?.theme || {},
@@ -638,10 +643,11 @@ const ProfileEditorModal = ({ profile, testTypes, onSave, onClose }) => {
               
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Loại Layout</label>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 gap-3">
                   {[
-                    { id: 'score', label: 'Score-based', desc: 'IQ, EQ (điểm số)' },
-                    { id: 'percent', label: 'Percent-based', desc: 'School (% đúng)' },
+                    { id: 'score', label: 'IQ/EQ Score', desc: 'Thang IQ (70-150)' },
+                    { id: 'points', label: 'Điểm số', desc: 'Điểm = Đúng × Điểm/câu' },
+                    { id: 'percent', label: 'Phần trăm', desc: '% câu đúng' },
                     { id: 'mbti', label: 'MBTI', desc: 'Tính cách 16 loại' }
                   ].map(layout => (
                     <button
@@ -770,6 +776,101 @@ const ProfileEditorModal = ({ profile, testTypes, onSave, onClose }) => {
                     })}
                   />
                 </>
+              )}
+              
+              {formData.layoutType === 'points' && (
+                <div className="space-y-4">
+                  <h3 className="text-white font-medium flex items-center gap-2">
+                    <FiSliders /> Cấu hình điểm số
+                  </h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-1">Điểm mỗi câu đúng</label>
+                      <input
+                        type="number"
+                        value={formData.pointsConfig?.pointsPerQuestion || 10}
+                        onChange={e => setFormData({
+                          ...formData,
+                          pointsConfig: { 
+                            ...formData.pointsConfig, 
+                            pointsPerQuestion: parseInt(e.target.value) || 10 
+                          }
+                        })}
+                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">VD: 10 điểm/câu → 20 câu = 200 điểm tối đa</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-1">Điểm tối đa (0 = tự tính)</label>
+                      <input
+                        type="number"
+                        value={formData.pointsConfig?.maxScore || 0}
+                        onChange={e => setFormData({
+                          ...formData,
+                          pointsConfig: { 
+                            ...formData.pointsConfig, 
+                            maxScore: parseInt(e.target.value) || 0 
+                          }
+                        })}
+                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Để 0 sẽ tự động tính = câu × điểm/câu</p>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-1">Điểm đạt (0 = không check)</label>
+                    <input
+                      type="number"
+                      value={formData.pointsConfig?.passingScore || 0}
+                      onChange={e => setFormData({
+                        ...formData,
+                        pointsConfig: { 
+                          ...formData.pointsConfig, 
+                          passingScore: parseInt(e.target.value) || 0 
+                        }
+                      })}
+                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white"
+                    />
+                  </div>
+                  <div className="flex flex-wrap gap-4 mt-4">
+                    <label className="flex items-center gap-2 text-gray-300">
+                      <input
+                        type="checkbox"
+                        checked={formData.pointsConfig?.showCorrectAnswers !== false}
+                        onChange={e => setFormData({
+                          ...formData,
+                          pointsConfig: { ...formData.pointsConfig, showCorrectAnswers: e.target.checked }
+                        })}
+                        className="rounded bg-slate-700 border-slate-600"
+                      />
+                      Hiện số câu đúng
+                    </label>
+                    <label className="flex items-center gap-2 text-gray-300">
+                      <input
+                        type="checkbox"
+                        checked={formData.pointsConfig?.showWrongAnswers !== false}
+                        onChange={e => setFormData({
+                          ...formData,
+                          pointsConfig: { ...formData.pointsConfig, showWrongAnswers: e.target.checked }
+                        })}
+                        className="rounded bg-slate-700 border-slate-600"
+                      />
+                      Hiện số câu sai
+                    </label>
+                    <label className="flex items-center gap-2 text-gray-300">
+                      <input
+                        type="checkbox"
+                        checked={formData.pointsConfig?.showQuestionReview !== false}
+                        onChange={e => setFormData({
+                          ...formData,
+                          pointsConfig: { ...formData.pointsConfig, showQuestionReview: e.target.checked }
+                        })}
+                        className="rounded bg-slate-700 border-slate-600"
+                      />
+                      Hiện chi tiết câu hỏi
+                    </label>
+                  </div>
+                </div>
               )}
               
               {formData.layoutType === 'percent' && (
@@ -1056,7 +1157,15 @@ export default function ResultProfiles() {
                 filterLayoutType === 'score' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
               }`}
             >
-              Score (IQ/EQ)
+              IQ/EQ (70-150)
+            </button>
+            <button
+              onClick={() => setFilterLayoutType('points')}
+              className={`px-4 py-2 rounded-lg text-sm whitespace-nowrap ${
+                filterLayoutType === 'points' ? 'bg-yellow-600 text-white' : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
+              }`}
+            >
+              Điểm số
             </button>
             <button
               onClick={() => setFilterLayoutType('percent')}
@@ -1064,7 +1173,7 @@ export default function ResultProfiles() {
                 filterLayoutType === 'percent' ? 'bg-green-600 text-white' : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
               }`}
             >
-              Percent (Học đường)
+              Phần trăm
             </button>
             <button
               onClick={() => setFilterLayoutType('mbti')}
