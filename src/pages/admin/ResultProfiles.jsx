@@ -662,7 +662,7 @@ const ProfileEditorModal = ({ profile, testTypes, onSave, onClose }) => {
               
               <div>
                 <label className="block text-sm text-gray-400 mb-2">Áp dụng cho loại test</label>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mb-3">
                   {testTypes.map(type => (
                     <button
                       key={type.value}
@@ -684,6 +684,58 @@ const ProfileEditorModal = ({ profile, testTypes, onSave, onClose }) => {
                     </button>
                   ))}
                 </div>
+                {/* Custom type input */}
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Thêm loại test tùy chỉnh..."
+                    className="flex-1 bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm"
+                    onKeyPress={e => {
+                      if (e.key === 'Enter' && e.target.value.trim()) {
+                        const newType = e.target.value.trim().toLowerCase()
+                        if (!formData.testTypes.includes(newType)) {
+                          setFormData({ ...formData, testTypes: [...formData.testTypes, newType] })
+                        }
+                        e.target.value = ''
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={e => {
+                      const input = e.target.previousSibling
+                      if (input.value.trim()) {
+                        const newType = input.value.trim().toLowerCase()
+                        if (!formData.testTypes.includes(newType)) {
+                          setFormData({ ...formData, testTypes: [...formData.testTypes, newType] })
+                        }
+                        input.value = ''
+                      }
+                    }}
+                    className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-lg"
+                  >
+                    <FiPlus size={16} />
+                  </button>
+                </div>
+                {/* Selected types display */}
+                {formData.testTypes.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {formData.testTypes.map(type => (
+                      <span
+                        key={type}
+                        className="inline-flex items-center gap-1 px-2 py-1 bg-purple-600/30 text-purple-300 rounded-lg text-sm"
+                      >
+                        {type}
+                        <button
+                          onClick={() => setFormData({ ...formData, testTypes: formData.testTypes.filter(t => t !== type) })}
+                          className="hover:text-red-400"
+                        >
+                          <FiX size={14} />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
               
               <label className="flex items-center gap-2 p-3 bg-slate-800/50 border border-slate-700 rounded-xl cursor-pointer">
