@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { FiArrowLeft, FiRefreshCw } from 'react-icons/fi'
 import { FaExclamationCircle, FaRedo } from 'react-icons/fa'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://betraffic-production.up.railway.app'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://betraffic-production-e127.up.railway.app'
 
 const MBTIResult = () => {
   const { sessionId } = useParams()

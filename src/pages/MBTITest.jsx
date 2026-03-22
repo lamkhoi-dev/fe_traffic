@@ -5,7 +5,7 @@ import { FiClock, FiArrowLeft, FiArrowRight, FiCheckCircle, FiRefreshCw } from '
 import { getDeviceFingerprint } from '../utils/fingerprint'
 import toast from 'react-hot-toast'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://betraffic-production.up.railway.app'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://betraffic-production-e127.up.railway.app'
 
 const MBTITest = () => {
   const navigate = useNavigate()

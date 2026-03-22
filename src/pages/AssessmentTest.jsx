@@ -6,7 +6,7 @@ import { HiAcademicCap, HiSparkles, HiLightningBolt } from 'react-icons/hi'
 import MathText from '../components/MathText'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 
-  (window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://betraffic-production.up.railway.app')
+  (window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://betraffic-production-e127.up.railway.app')
 
 const AssessmentTest = () => {
   const { assessmentId } = useParams()
